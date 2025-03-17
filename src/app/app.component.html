@@ -1,29 +1,5 @@
-<app-menu></app-menu>
-<router-outlet />
-<!-- <div class="flexbox">
-  <app-menu (selectedPage)="changePage($event)"></app-menu>
-   @switch (page) {
-    @case ("home") {
-      <app-home></app-home>
-    }
-    @case ("posts") {
-      <app-posts></app-posts>
-    }
-    @case ("profile") {
-      <app-profile></app-profile>
-    }
-    @default {
-      <app-not-found></app-not-found>
-    }
-   }
-</div> -->
-
-<!-- @if (page === "home") {
-  <app-home></app-home>
- }
- @else if (page === "posts") {
-  <app-posts></app-posts>
- }
- @else if (page === "profile") {
-  <app-profile></app-profile>
- } -->
+<div class="flexbox">
+  <app-menu></app-menu>
+  <router-outlet />
+  <app-footer></app-footer>
+</div>
