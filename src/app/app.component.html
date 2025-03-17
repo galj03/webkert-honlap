@@ -1,8 +1,7 @@
+<app-menu></app-menu>
 <router-outlet />
-<div class="flexbox">
-  <app-menu></app-menu>
-
-  <!-- TODO: finish normal routing -->
+<!-- <div class="flexbox">
+  <app-menu (selectedPage)="changePage($event)"></app-menu>
    @switch (page) {
     @case ("home") {
       <app-home></app-home>
@@ -13,8 +12,11 @@
     @case ("profile") {
       <app-profile></app-profile>
     }
+    @default {
+      <app-not-found></app-not-found>
+    }
    }
-</div>
+</div> -->
 
 <!-- @if (page === "home") {
   <app-home></app-home>

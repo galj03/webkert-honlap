@@ -1,15 +1,13 @@
+<!-- <select #pageValue (change)="menuSwitch(pageValue.value)">
+    <option value="home">Kezdőlap</option>
+    <option value="posts">Bejegyzések</option>
+    <option value="profile">Profil</option>
+</select> -->
 <nav>
-    <a routerLink="home">
-        <span>Kezdőlap</span>
-    </a>
-    <a routerLink="posts">
-        <span>Bejegyzések</span>
-    </a>
-    <a routerLink="profile">
-        <span>Profil</span>
-    </a>
-    <!-- TODO: login, reg, etc.
-    <a routerLink="home">
-        <span>Kezdőlap</span>
-    </a> -->
+    <ul>
+      <li><a routerLink="/home">Kezdőlap</a></li>
+      <li><a routerLink="/posts">Bejegyzések</a></li>
+      <li><a routerLink="/profile">Profil</a></li>
+      <!-- TODO: login, reg, etc.-->
+    </ul>
 </nav>
