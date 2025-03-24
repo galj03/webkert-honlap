@@ -1,5 +1,30 @@
-<div class="flexbox">
+<!-- <div class="flexbox">
   <app-menu></app-menu>
   <router-outlet />
   <app-footer></app-footer>
-</div>
+</div> -->
+<mat-sidenav-container>
+  <mat-sidenav #sidenav>
+    <app-menu [sidenav]="sidenav"></app-menu>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <mat-toolbar>
+      <button 
+        mat-button 
+        (click)="onToggleSidenav(sidenav)"
+        class="menu-toggle-button">
+        <mat-icon>menu</mat-icon>
+      </button>
+      <div>WebDev String Orchestra</div>
+      <nav>
+        <ul>
+          <li><a routerLink="/home">Kezdőlap</a></li>
+          <li><a routerLink="/posts">Bejegyzések</a></li>
+          <li><a routerLink="/profile">Profil</a></li>
+          <!-- TODO: more pages -->
+        </ul>
+      </nav>
+    </mat-toolbar>
+    <router-outlet />
+  </mat-sidenav-content>
+</mat-sidenav-container>
