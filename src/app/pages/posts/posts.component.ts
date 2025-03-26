@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { MatCardModule } from '@angular/material/card';
 
 @Component({
   selector: 'app-posts',
-  imports: [],
+  imports: [MatCardModule],
   templateUrl: './posts.component.html',
   styleUrl: './posts.component.scss'
 })
