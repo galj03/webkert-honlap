@@ -17,10 +17,18 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
 })
 export class MenuComponent {
   @Input() sidenav!: MatSidenav;
+  @Input() isLoggedIn: boolean = false;
+  @Output() logoutEvent = new EventEmitter<void>(); // ez mit tud pontosan?
 
   closeMenu() {
     if (this.sidenav) {
       this.sidenav.close();
     }
+  }
+
+  logout() { //TODO: service
+    localStorage.setItem('isLoggedIn', 'false');
+    window.location.href = '/home';
+    this.closeMenu();
   }
 }

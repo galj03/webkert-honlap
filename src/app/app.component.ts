@@ -34,6 +34,7 @@ export class AppComponent {
 
   checkLoginStatus(): void {
     this.isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+    console.log(this.isLoggedIn);
   }
 
   logout(): void {
