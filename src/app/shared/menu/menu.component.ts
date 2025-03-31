@@ -26,9 +26,7 @@ export class MenuComponent {
     }
   }
 
-  logout() { //TODO: service
-    localStorage.setItem('isLoggedIn', 'false');
-    window.location.href = '/home';
-    this.closeMenu();
+  logout() {
+    this.logoutEvent.emit();
   }
 }
