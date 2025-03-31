@@ -6,7 +6,6 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button'
 import { MatIconModule } from '@angular/material/icon'
 import { MenuComponent } from "./shared/menu/menu.component";
-import { FooterComponent } from "./shared/footer/footer.component";
 
 @Component({
   selector: 'app-root',
@@ -25,8 +24,23 @@ import { FooterComponent } from "./shared/footer/footer.component";
 })
 export class AppComponent {
   title = 'webkert-honlap';
+  isLoggedIn = false;
 
   page = "home";
+
+  ngOnInit(): void {
+    this.checkLoginStatus();
+  }
+
+  checkLoginStatus(): void {
+    this.isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+  }
+
+  logout(): void {
+    localStorage.setItem('isLoggedIn', 'false');
+    this.isLoggedIn = false;
+    window.location.href = '/home';
+  }
 
   onToggleSidenav(sidenav: MatSidenav){
     sidenav.toggle();

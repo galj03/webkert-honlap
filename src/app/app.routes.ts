@@ -1,8 +1,10 @@
 import { Routes } from '@angular/router';
 import { HomeComponent } from './pages/home/home.component';
-import { NotFoundComponent } from './pages/not-found/not-found.component';
+import { NotFoundComponent } from './shared/not-found/not-found.component';
 import { PostsComponent } from './pages/posts/posts.component';
 import { ProfileComponent } from './pages/profile/profile.component';
+import { LoginComponent } from './pages/login/login.component';
+import { SignupComponent } from './pages/signup/signup.component';
 
 export const routes: Routes = [
     {
@@ -14,8 +16,14 @@ export const routes: Routes = [
       // TODO: ha van valami, aminek nem akaruk megvarni a betolteset, akkor lazy loaddal tolti a dolgokat kozben (kinda)
       // { 
       //   path: 'login',
-      //   loadChildren: () => import('./pages/login-page/login-page.component').then(m => m.LoginPageComponent) 
+      //   loadChildren: () => import('./pages/login/login.component').then(m => m.LoginComponent) 
       // },
+      { 
+        path: 'login', component: LoginComponent
+      },
+      { 
+        path: 'signup', component: SignupComponent
+      },
       // { 
       //   path: 'admin', 
       //   loadChildren: () => import('./pages/admin/admin.component').then(m => m.AdminComponent) ,
