@@ -45,7 +45,7 @@ export class LoginComponent {
       
       setTimeout(() => {
         window.location.href = '/home';
-      }, 2000); // TODO: remove this later
+      }, 500); // TODO: remove this later
     } else {
       this.loginError = 'Invalid email or password!';
     }

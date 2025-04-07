@@ -26,6 +26,7 @@ import { User } from '../../shared/models/User';
   styleUrl: './signup.component.scss'
 })
 export class SignupComponent {
+  // TODO: builder
   signUpForm = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
     password: new FormControl('', [Validators.required, Validators.minLength(6)]),
