@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { FormGroup, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import { FormGroup, FormControl, ReactiveFormsModule, Validators, FormBuilder } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -25,23 +25,27 @@ import { User } from '../../shared/models/User';
   templateUrl: './signup.component.html',
   styleUrl: './signup.component.scss'
 })
-export class SignupComponent {
-  // TODO: builder
-  signUpForm = new FormGroup({
-    email: new FormControl('', [Validators.required, Validators.email]),
-    password: new FormControl('', [Validators.required, Validators.minLength(6)]),
-    rePassword: new FormControl('', [Validators.required]),
-    name: new FormGroup({
-      firstName: new FormControl('', [Validators.required, Validators.minLength(2)]),
-      lastName: new FormControl('', [Validators.required, Validators.minLength(2)])
-    })
-  });
-  
+export class SignupComponent implements OnInit{
+  signUpForm!: FormGroup;  
   isLoading = false;
   showForm = true;
   signupError = '';
 
-  constructor(private router: Router) {}
+  constructor(
+    private fb: FormBuilder,
+    private router: Router) {}
+
+  ngOnInit(): void {
+    this.signUpForm = this.fb.group({
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required, Validators.minLength(6)]],
+      rePassword: ['', [Validators.required]],
+      name: [{
+        firstName: ['', [Validators.required, Validators.minLength(2)]],
+        lastName: ['', [Validators.required, Validators.minLength(2)]]
+      }]
+    });
+  }
 
   signup(): void {
     if (this.signUpForm.invalid) {
@@ -66,8 +70,6 @@ export class SignupComponent {
       },
       email: this.signUpForm.value.email || '',
       password: this.signUpForm.value.password || ''
-      // tasks: [],
-      // completed_tasks: []
     };
 
     console.log('New user:', newUser);

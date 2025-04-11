@@ -1,17 +1,17 @@
 import { Routes } from '@angular/router';
 import { HomeComponent } from './pages/home/home.component';
 import { NotFoundComponent } from './shared/not-found/not-found.component';
-import { PostsComponent } from './pages/posts/posts.component';
 import { ProfileComponent } from './pages/profile/profile.component';
 import { LoginComponent } from './pages/login/login.component';
 import { SignupComponent } from './pages/signup/signup.component';
+import { TourComponent } from './pages/tour/tour.component';
 
 export const routes: Routes = [
     {
         path: 'home', component: HomeComponent
       },
       {
-        path: 'posts', component: PostsComponent
+        path: 'tour', component: TourComponent
       },
       // TODO: ha van valami, aminek nem akaruk megvarni a betolteset, akkor lazy loaddal tolti a dolgokat kozben (kinda)
       // { 

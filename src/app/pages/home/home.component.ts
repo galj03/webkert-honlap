@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatInputModule } from '@angular/material/input';
@@ -10,17 +10,14 @@ import { MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
-import { Concert } from '../../shared/models/Concert';
-import { ConcertService } from '../../shared/services/concert.service';
-import { Tour } from '../../shared/models/Tour';
-import { DateFormatterPipe } from '../../shared/pipes/date.pipe';
+import { Post } from '../../shared/models/Post';
+import { User } from '../../shared/models/User';
 
 @Component({
   selector: 'app-home',
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    DateFormatterPipe,
     MatCardModule,
     MatInputModule,
     MatSelectModule,
@@ -35,74 +32,67 @@ import { DateFormatterPipe } from '../../shared/pipes/date.pipe';
   styleUrl: './home.component.scss'
 })
 export class HomeComponent implements OnInit {
-  displayedColumns: string[] = ['venue', 'place', 'date', 'actions'];
-  concertForm!: FormGroup;
-  concerts: Concert[] = [];
-  isLoading = false;
-  currentTour: Tour = {
-      id: 1,
-      title: "Test Tour",
-      startYear: 2024,
-      endYear: 2025
-  }
-  tours: Tour[] = [this.currentTour];
-  title: string = this.currentTour.title;
+  @Input() isLoggedIn: boolean = false; //TODO: get value
+  cardTitle: string = "Posts";
+  postForm!: FormGroup;
+  isLoading: boolean = false;
+  currentUser: User = {
+    email: "testadmin@gmail.com",
+    name: {
+      firstName: "Adminus",
+      lastName: "Testinus"
+    },
+    password: "some secure password"
+  };
 
-  constructor(
-    private fb: FormBuilder,
-    private concertService: ConcertService
+constructor(
+    private fb: FormBuilder
   ) {}
 
   ngOnInit(): void {
     this.initializeForm();
-    this.loadConcerts();
+    this.loadPosts();
   }
 
   initializeForm(): void {
-    this.concertForm = this.fb.group({
-      venue: ['', [Validators.required, Validators.minLength(3)]],
-      place: ['', [Validators.required, Validators.minLength(3)]],
-      concertDate: [new Date(), Validators.required],
-      tour: ['', Validators.maxLength(200)] //TODO: handle this
+    this.postForm = this.fb.group({
+      title: ['', [Validators.required, Validators.minLength(5)]],
+      content: ['', [Validators.required, Validators.minLength(10)]]
     });
   }
 
-  loadConcerts(): void {
-    this.concerts = this.concertService.getAllFromTour(this.currentTour);
-    console.log("Concerts loaded.");
-    // .subscribe(concerts => {
-    //   this.concerts = concerts;
-    //   console.log('Tasks loaded with observable');
-    // });
+  loadPosts(): void {
+    //TODO: get these from some constants
+    //this.concerts = this.concertService.getAllFromTour(this.currentTour);
+    console.log("Posts loaded.");
   }
 
-  addConcert(): void {
-    if (this.concertForm.valid) {
-      this.isLoading = true;
-      const formValue = this.concertForm.value;
-      
-      const newConcert: Omit<Concert, 'id'> = {
-        venue: formValue.venue,
-        place: formValue.place,
-        date: formValue.concertDate,
-        tour: this.currentTour
-      };
-      
-
-      this.concertService.addConcert(newConcert)
-        .then(addedConcert => {
-          console.log('New concert added with promise', addedConcert);
-          
-          this.loadConcerts();
-        })
-        .finally(() => {
-          this.isLoading = false;
+  addPost(): void {
+      if (this.postForm.valid) {
+        this.isLoading = true;
+        const formValue = this.postForm.value;
+        
+        const newPost: Omit<Post, 'id'> = {
+          title: formValue.title,
+          content: formValue.content,
+          postedBy: this.currentUser
+        };
+        
+        //TODO: service
+        // this.concertService.addConcert(newConcert)
+        //   .then(addedConcert => {
+        //     console.log('New concert added with promise', addedConcert);
+            
+        //     this.loadConcerts();
+        //   })
+        //   .finally(() => {
+        //     this.isLoading = false;
+        //   });
+      } else {
+        Object.keys(this.postForm.controls).forEach(key => {
+          const control = this.postForm.get(key);
+          control?.markAsTouched();
         });
-    } else {
-      Object.keys(this.concertForm.controls).forEach(key => {
-        const control = this.concertForm.get(key);
-        control?.markAsTouched();
-      });
+      }
     }
-  }
 }

@@ -77,7 +77,7 @@ p {
     flex: 2;
   }
   
-  .priority-select, .post-title-input {
+  .priority-select, .date-picker {
     flex: 1;
   }
   
@@ -114,12 +114,6 @@ p {
     border-bottom: 1px solid rgba(0, 0, 0, 0.08);
   }
   
-  .task-description {
-    font-size: 12px;
-    color: #666;
-    margin-top: 4px;
-  }
-  
   .mat-column-status {
     width: 70px;
   }
@@ -147,7 +141,7 @@ p {
       flex-direction: column;
     }
     
-    .input, .priority-select, .post-title-input {
+    .input, .priority-select, .date-picker {
       width: 100%;
     }
     
@@ -165,11 +159,6 @@ p {
     .mat-column-name {
       min-width: 200px;
     }
-    
-    .task-description {
-      white-space: normal;
-      max-width: 250px;
-    }
   }
   
   @media (max-width: 480px) {
@@ -180,7 +169,7 @@ p {
     .mat-header-cell, .mat-cell {
       padding: 8px 4px;
     }
-    
+
     .add-button {
       width: 100%;
       margin: 10px, 0;
@@ -193,9 +182,5 @@ p {
     
     .mat-column-name {
       min-width: 150px;
-    }
-    
-    .task-description {
-      max-width: 150px;
     }
   }
