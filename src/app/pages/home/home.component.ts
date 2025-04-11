@@ -12,6 +12,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { Post } from '../../shared/models/Post';
 import { User } from '../../shared/models/User';
+import { PostService } from '../../shared/services/post.service';
 
 @Component({
   selector: 'app-home',
@@ -32,10 +33,11 @@ import { User } from '../../shared/models/User';
   styleUrl: './home.component.scss'
 })
 export class HomeComponent implements OnInit {
-  @Input() isLoggedIn: boolean = false; //TODO: get value
+  //@Input() isLoggedIn: boolean = false; //TODO: get value
   cardTitle: string = "Posts";
   postForm!: FormGroup;
   isLoading: boolean = false;
+  posts: Post[] = [];
   currentUser: User = {
     email: "testadmin@gmail.com",
     name: {
@@ -46,7 +48,8 @@ export class HomeComponent implements OnInit {
   };
 
 constructor(
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private postSevice: PostService
   ) {}
 
   ngOnInit(): void {
@@ -62,8 +65,7 @@ constructor(
   }
 
   loadPosts(): void {
-    //TODO: get these from some constants
-    //this.concerts = this.concertService.getAllFromTour(this.currentTour);
+    this.posts = this.postSevice.getAllPosts();
     console.log("Posts loaded.");
   }
 
@@ -78,16 +80,15 @@ constructor(
           postedBy: this.currentUser
         };
         
-        //TODO: service
-        // this.concertService.addConcert(newConcert)
-        //   .then(addedConcert => {
-        //     console.log('New concert added with promise', addedConcert);
+        this.postSevice.addPost(newPost)
+          .then(addedPost => {
+            console.log('New post added with promise', addedPost);
             
-        //     this.loadConcerts();
-        //   })
-        //   .finally(() => {
-        //     this.isLoading = false;
-        //   });
+            this.loadPosts();
+          })
+          .finally(() => {
+            this.isLoading = false;
+          });
       } else {
         Object.keys(this.postForm.controls).forEach(key => {
           const control = this.postForm.get(key);
