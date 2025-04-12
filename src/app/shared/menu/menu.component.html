@@ -7,12 +7,6 @@
     <mat-icon matListItemIcon>event</mat-icon>
     <span matListItemTitle>Koncertek</span>
   </a>
-  @if (isLoggedIn) {
-    <a mat-list-item routerLink="/profile" routerLinkActive="active-list-item" (click)="closeMenu()">
-      <mat-icon matListItemIcon>person</mat-icon>
-      <span matListItemTitle>Profil</span>
-    </a>
-  }
   @if (!isLoggedIn) {
     <a mat-list-item routerLink="/login" routerLinkActive="active-list-item" (click)="closeMenu()">
       <mat-icon matListItemIcon>login</mat-icon>

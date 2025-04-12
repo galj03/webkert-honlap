@@ -7,7 +7,8 @@
     </div>
     <div class="container">
         <h2>TODO</h2>
-        <p>Implement html pages</p>
+        <p>Create unique design</p>
+        <p>Attribute directives</p>
         <p>Responsive design</p>
     </div>
 
@@ -37,25 +38,32 @@
       <!-- } -->
       
       <div class="container">
-      @for (post of posts; track $index) {
-            <mat-card class="post-card">
-                <mat-card-header>
-                    <mat-card-title>{{ post.title }}</mat-card-title>
-                </mat-card-header>
-                
-                <mat-card-content>
-                    <div class="post-text">
-                        {{ post.content }}
-                    </div>
-                    <mat-divider></mat-divider>
-                </mat-card-content>
+        <div class="button-group">
+            <button (click)="isExpanded = 'not-expanded'" [ngClass]="{'active': isExpanded === 'not-expanded'}">-</button>
+            <button (click)="isExpanded = 'expanded'" [ngClass]="{'active': isExpanded === 'expanded'}">+</button>
+        </div>
 
-                <mat-card-footer>
-                    <p>{{ post.postedBy.name.lastName }} {{post.postedBy.name.firstName}}</p>
-                    <p>{{ post.date | postDateFormatter}}</p>
-                </mat-card-footer>
-            </mat-card>
-      }
+        <div [ngClass]="isExpanded" class="container">
+            @for (post of posts; track $index) {
+                    <mat-card class="post-card">
+                        <mat-card-header>
+                            <mat-card-title>{{ post.title }}</mat-card-title>
+                        </mat-card-header>
+                        
+                        <mat-card-content>
+                            <div class="post-text">
+                                {{ post.content }}
+                            </div>
+                            <mat-divider></mat-divider>
+                        </mat-card-content>
+
+                        <mat-card-footer>
+                            <p>{{ post.postedBy.name.lastName }} {{post.postedBy.name.firstName}}</p>
+                            <p>{{ post.date | postDateFormatter}}</p>
+                        </mat-card-footer>
+                    </mat-card>
+            }
+        </div>
     </div>
       </mat-card-content>
 </mat-card>

@@ -40,16 +40,16 @@ export class SignupComponent implements OnInit{
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
       rePassword: ['', [Validators.required]],
-      name: [{
+      name: this.fb.group({
         firstName: ['', [Validators.required, Validators.minLength(2)]],
         lastName: ['', [Validators.required, Validators.minLength(2)]]
-      }]
+      })
     });
   }
 
   signup(): void {
     if (this.signUpForm.invalid) {
-      this.signupError = 'Please correct the form errors before submitting.';
+      this.signupError = 'Kérjük, javítsa ki a hibákat a beadás előtt.';
       return;
     }
 
@@ -77,6 +77,6 @@ export class SignupComponent implements OnInit{
 
     setTimeout(() => {
       this.router.navigateByUrl('/home');
-    }, 2000);
+    }, 1000);
   }
 }

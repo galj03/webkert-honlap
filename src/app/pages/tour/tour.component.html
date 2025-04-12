@@ -5,6 +5,9 @@
         </mat-card-header>
         
         <mat-card-content>
+            <!-- TODO: autocomplete current Tour
+            TODO: refresh button -->
+
         <form [formGroup]="concertForm" (ngSubmit)="addConcert()" class="form">
             <div class="form-row">
             <mat-form-field appearance="outline" class="input">
@@ -38,7 +41,7 @@
             <input matInput formControlName="venue" placeholder="Venue">
             </mat-form-field>
         </form>
-        
+
         <div class="table-container">
             <table mat-table [dataSource]="concerts" class="table">
                 <ng-container matColumnDef="venue">

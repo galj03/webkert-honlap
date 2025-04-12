@@ -1,7 +1,6 @@
 import { Routes } from '@angular/router';
 import { HomeComponent } from './pages/home/home.component';
 import { NotFoundComponent } from './shared/not-found/not-found.component';
-import { ProfileComponent } from './pages/profile/profile.component';
 import { LoginComponent } from './pages/login/login.component';
 import { SignupComponent } from './pages/signup/signup.component';
 import { TourComponent } from './pages/tour/tour.component';
@@ -29,10 +28,6 @@ export const routes: Routes = [
       //   loadChildren: () => import('./pages/admin/admin.component').then(m => m.AdminComponent) ,
       //   canActivate: [adminGuard]
       // },
-      { 
-        path: 'profile', component: ProfileComponent
-        //canActivate: [authGuard]
-      },
       {
         path: '',
         redirectTo: 'home',

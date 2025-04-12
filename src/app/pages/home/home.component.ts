@@ -40,6 +40,7 @@ export class HomeComponent implements OnInit {
   //@Input() isLoggedIn: boolean = false; //TODO: get value
   cardTitle: string = "Posts";
   postForm!: FormGroup;
+  isExpanded: 'expanded' | 'not-expanded' = 'expanded';
   isLoading: boolean = false;
   posts: Post[] = [];
   currentUser: User = {

@@ -33,7 +33,7 @@ export class PostService {
       date: new Date('2025-04-12')
     },
     {
-      id: 2,
+      id: 3,
       title: "Test Tour in progress!",
       content: "Test Tour is finally underway, with its first concert in Budapest only two months away...",
       postedBy: this.currentUser,

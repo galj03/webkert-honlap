@@ -45,6 +45,7 @@ p {
     background-color: $buttonHoverColor;
 }
 
+// card stuff
 .main-card {
     width: 90vw;
     margin: 20px auto;
@@ -135,6 +136,8 @@ p {
     text-align: center;
   }
 
+
+  // post stuff
   mat-card-footer{
     display: flex;
     flex-direction: column;
@@ -158,14 +161,23 @@ p {
   .post-card{
     width: 90%;
     justify-content: center;
-    
+
     margin: 10px 0;
   }
 
   .post-text{
     width: 95%;
   }
+
+  //ngClass stuff
+  .expanded{
+    
+  }
   
+  .not-expanded{
+    display: none;
+  }
+
   @media (max-width: 850px) {
     .main-card {
       width: 95%;

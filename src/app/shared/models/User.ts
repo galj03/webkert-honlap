@@ -5,4 +5,5 @@ export interface User {
       lastName: string;
     };
     password: string;
+    //TODO: role
   }
