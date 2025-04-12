@@ -36,8 +36,8 @@
         </form>
       <!-- } -->
       
+      <div class="container">
       @for (post of posts; track $index) {
-        <div class="container">
             <mat-card class="post-card">
                 <mat-card-header>
                     <mat-card-title>{{ post.title }}</mat-card-title>
@@ -55,8 +55,8 @@
                     <p>{{ post.date | postDateFormatter}}</p>
                 </mat-card-footer>
             </mat-card>
-        </div>
       }
+    </div>
       </mat-card-content>
 </mat-card>
 </main>

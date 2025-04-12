@@ -10,6 +10,9 @@ $buttonHoverColor: #4a3cd6;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     padding: 40px 20px;
     text-align: center;
+    justify-content: center;
+    align-items: center;
+    margin: 10px 0;
 }
 
 h1 {
@@ -136,6 +139,7 @@ p {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    justify-self: center;
     //align-items: center;
     
     max-height: fit-content;
@@ -153,6 +157,9 @@ p {
 
   .post-card{
     width: 90%;
+    justify-content: center;
+    
+    margin: 10px 0;
   }
 
   .post-text{
