@@ -58,7 +58,7 @@
             <ng-container matColumnDef="date">
                 <th mat-header-cell *matHeaderCellDef>Date</th>
                 <td mat-cell *matCellDef="let concert">
-                {{ concert.date | dateFormatter }}
+                {{ concert.date | concertDateFormatter }}
                 </td>
             </ng-container>
             

@@ -43,7 +43,7 @@ p {
 }
 
 .main-card {
-    width: 800px;
+    width: 90vw;
     margin: 20px auto;
     border-radius: 8px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
@@ -77,7 +77,7 @@ p {
     flex: 2;
   }
   
-  .priority-select, .post-title-input {
+  .post-title-input {
     flex: 1;
   }
   
@@ -114,12 +114,6 @@ p {
     border-bottom: 1px solid rgba(0, 0, 0, 0.08);
   }
   
-  .task-description {
-    font-size: 12px;
-    color: #666;
-    margin-top: 4px;
-  }
-  
   .mat-column-status {
     width: 70px;
   }
@@ -137,6 +131,33 @@ p {
     width: 70px;
     text-align: center;
   }
+
+  mat-card-footer{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    //align-items: center;
+    
+    max-height: fit-content;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  mat-divider{
+    margin: 15px 0;
+  }
+
+  mat-card-footer > p{
+    font-size: 1rem;
+  }
+
+  .post-card{
+    width: 90%;
+  }
+
+  .post-text{
+    width: 95%;
+  }
   
   @media (max-width: 850px) {
     .main-card {
@@ -147,7 +168,7 @@ p {
       flex-direction: column;
     }
     
-    .input, .priority-select, .post-title-input {
+    .input, .post-title-input {
       width: 100%;
     }
     
@@ -165,11 +186,6 @@ p {
     .mat-column-name {
       min-width: 200px;
     }
-    
-    .task-description {
-      white-space: normal;
-      max-width: 250px;
-    }
   }
   
   @media (max-width: 480px) {
@@ -186,16 +202,7 @@ p {
       margin: 10px, 0;
     }
     
-    .priority-chip {
-      padding: 2px 8px;
-      font-size: 11px;
-    }
-    
     .mat-column-name {
       min-width: 150px;
-    }
-    
-    .task-description {
-      max-width: 150px;
     }
   }

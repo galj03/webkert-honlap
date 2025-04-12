@@ -13,6 +13,8 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { Post } from '../../shared/models/Post';
 import { User } from '../../shared/models/User';
 import { PostService } from '../../shared/services/post.service';
+import { PostDateFormatterPipe } from '../../shared/pipes/post_date.pipe';
+import { MatDivider } from '@angular/material/divider';
 
 @Component({
   selector: 'app-home',
@@ -24,7 +26,9 @@ import { PostService } from '../../shared/services/post.service';
     MatSelectModule,
     MatButtonModule,
     MatCheckboxModule,
+    PostDateFormatterPipe,
     MatTableModule,
+    MatDivider,
     MatIconModule,
     MatDatepickerModule,
     MatNativeDateModule
@@ -77,7 +81,8 @@ constructor(
         const newPost: Omit<Post, 'id'> = {
           title: formValue.title,
           content: formValue.content,
-          postedBy: this.currentUser
+          postedBy: this.currentUser,
+          date: new Date(Date.now())
         };
         
         this.postSevice.addPost(newPost)

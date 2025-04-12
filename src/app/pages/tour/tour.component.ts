@@ -12,7 +12,7 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { Concert } from '../../shared/models/Concert';
 import { ConcertService } from '../../shared/services/concert.service';
 import { Tour } from '../../shared/models/Tour';
-import { DateFormatterPipe } from '../../shared/pipes/date.pipe';
+import { ConcertDateFormatterPipe } from '../../shared/pipes/concert_date.pipe';
 import { MatIconModule } from '@angular/material/icon';
 
 @Component({
@@ -20,7 +20,7 @@ import { MatIconModule } from '@angular/material/icon';
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    DateFormatterPipe,
+    ConcertDateFormatterPipe,
     MatCardModule,
     MatInputModule,
     MatSelectModule,
