@@ -58,8 +58,8 @@
                         </mat-card-content>
 
                         <mat-card-footer>
-                            <p>{{ post.postedBy.name.lastName }} {{post.postedBy.name.firstName}}</p>
-                            <p>{{ post.date | postDateFormatter}}</p>
+                            <div>{{ post.postedBy.name.lastName }} {{post.postedBy.name.firstName}}</div>
+                            <div>{{ post.date | postDateFormatter}}</div>
                         </mat-card-footer>
                     </mat-card>
             }
