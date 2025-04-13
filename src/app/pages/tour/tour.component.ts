@@ -1,11 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import { MatTableModule } from '@angular/material/table';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
@@ -21,11 +22,13 @@ import { MatIconModule } from '@angular/material/icon';
     CommonModule,
     ReactiveFormsModule,
     ConcertDateFormatterPipe,
+    FormsModule,
     MatCardModule,
     MatInputModule,
     MatSelectModule,
     MatButtonModule,
     MatCheckboxModule,
+    MatAutocompleteModule,
     MatTableModule,
     MatIconModule,
     MatDatepickerModule,
@@ -38,6 +41,10 @@ export class TourComponent implements OnInit{
   concertForm!: FormGroup;
   concerts: Concert[] = [];
   isLoading = false;
+
+  //TODO: load these from service later
+  selectedTour: string = "Test Tour";
+  tourNames: string[] = ["Test Tour"];
   currentTour: Tour = {
       id: 1,
       title: "Test Tour",
@@ -73,6 +80,13 @@ export class TourComponent implements OnInit{
     //   this.concerts = concerts;
     //   console.log('Tasks loaded with observable');
     // });
+  }
+
+  refreshTour(): void{
+    //TODO: connect with service (and firebase, later)
+    // this.tourService.updateCurrentTour(this.selectedTour);
+    // this.currentTour = this.tourService.getCurrentTour();
+    console.log("Selected tour: ", this.selectedTour);
   }
 
   addConcert(): void {

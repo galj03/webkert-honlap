@@ -1,13 +1,31 @@
 <main class="flexbox">
     <mat-card class="main-card">
         <mat-card-header>
-        <mat-card-title>{{ title }}</mat-card-title>
+        <mat-card-title>Turnék</mat-card-title>
         </mat-card-header>
         
         <mat-card-content>
-            <!-- TODO: autocomplete current Tour
-            TODO: refresh button -->
+            <div class="tour-selection">
+                <!-- TODO: fix css -->
+                <mat-form-field appearance="outline" class="input">
+                    <mat-label>Turné</mat-label>
+                    <input #input
+                            type="text"
+                            placeholder="Válassza ki a turnét"
+                            matInput
+                            [(ngModel)]="selectedTour"
+                            [matAutocomplete]="auto">
+                    <mat-autocomplete #auto="matAutocomplete">
+                        @for (option of tourNames; track option) {
+                        <mat-option [value]="option">{{option}}</mat-option>
+                        }
+                    </mat-autocomplete>
+                </mat-form-field>
 
+                <button mat-flat-button color="primary" (click)="refreshTour()" class="update-button">Update tour</button>
+            </div>
+
+        <mat-card-title>{{ title }}</mat-card-title>
         <form [formGroup]="concertForm" (ngSubmit)="addConcert()" class="form">
             <div class="form-row">
             <mat-form-field appearance="outline" class="input">

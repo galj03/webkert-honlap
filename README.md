@@ -2,6 +2,12 @@
 
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.1.7.
 
+## !!!Fontos infó a javítóknak!!!
+
+Ahol a projektben **"TODO"** szerepel, az a második mérföldkőre fog elkészülni. Nem azért maradt úgy, mert valamit nem fejeztem be, amit az első mérföldkőre szántam.
+
+Köszönöm a megértést!
+
 ## Development server
 
 To start a local development server, run:
