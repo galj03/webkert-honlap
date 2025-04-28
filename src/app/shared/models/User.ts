@@ -1,3 +1,5 @@
+import { roles } from "../constants/constants";
+
 export interface User {
     email: string;
     name: {
@@ -5,5 +7,5 @@ export interface User {
       lastName: string;
     };
     password: string;
-    //TODO: role
+    // role: roles;
   }

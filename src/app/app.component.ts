@@ -1,11 +1,13 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { RouterLink, RouterOutlet } from '@angular/router';
 import { MatSidenav, MatSidenavModule } from '@angular/material/sidenav';
 import { MatCardModule } from '@angular/material/card';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button'
 import { MatIconModule } from '@angular/material/icon'
-import { MenuComponent } from "./shared/menu/menu.component";
+import { MenuComponent } from './pages/menu/menu.component';
+import { AuthService } from './shared/services/auth.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -22,25 +24,32 @@ import { MenuComponent } from "./shared/menu/menu.component";
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
-export class AppComponent {
+export class AppComponent implements OnInit, OnDestroy  {
   title = 'webkert-honlap';
   isLoggedIn = false;
+  private authSubscription?: Subscription;
 
   page = "home";
+
+  constructor(private authService: AuthService){}
 
   ngOnInit(): void {
     this.checkLoginStatus();
   }
 
   checkLoginStatus(): void {
-    this.isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
-    console.log(this.isLoggedIn);
+    this.authSubscription = this.authService.currentUser.subscribe(user => {
+      this.isLoggedIn = !!user;
+      localStorage.setItem('isLoggedIn', this.isLoggedIn ? 'true' : 'false');
+    });
+  }
+  
+  ngOnDestroy(): void {
+    this.authSubscription?.unsubscribe();
   }
 
   logout(): void {
-    localStorage.setItem('isLoggedIn', 'false');
-    this.isLoggedIn = false;
-    window.location.href = '/home';
+    this.authService.signOut();
   }
 
   onToggleSidenav(sidenav: MatSidenav){

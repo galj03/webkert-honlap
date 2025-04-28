@@ -63,6 +63,7 @@ export class SignupComponent implements OnInit{
     this.isLoading = true;
     this.showForm = false;
 
+    //TODO: firestore
     const newUser: User = {
       name: {
         firstName: this.signUpForm.value.name?.firstName || '',

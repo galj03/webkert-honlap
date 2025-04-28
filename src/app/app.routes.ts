@@ -1,9 +1,10 @@
 import { Routes } from '@angular/router';
 import { HomeComponent } from './pages/home/home.component';
-import { NotFoundComponent } from './shared/not-found/not-found.component';
 import { LoginComponent } from './pages/login/login.component';
 import { SignupComponent } from './pages/signup/signup.component';
 import { TourComponent } from './pages/tour/tour.component';
+import { NotFoundComponent } from './pages/not-found/not-found.component';
+import { publicGuard } from './shared/guards/public.guard';
 
 export const routes: Routes = [
     {
@@ -18,10 +19,12 @@ export const routes: Routes = [
       //   loadChildren: () => import('./pages/login/login.component').then(m => m.LoginComponent) 
       // },
       { 
-        path: 'login', component: LoginComponent
+        path: 'login', component: LoginComponent,
+        canActivate: [publicGuard]
       },
       { 
-        path: 'signup', component: SignupComponent
+        path: 'signup', component: SignupComponent,
+        canActivate: [publicGuard]
       },
       // { 
       //   path: 'admin', 
