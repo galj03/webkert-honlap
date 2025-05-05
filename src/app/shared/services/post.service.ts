@@ -8,13 +8,14 @@ import { AuthService } from './auth.service';
   providedIn: 'root'
 })
 export class PostService {
-  private currentUser: User;
+  private currentUser?: User; //TODO: get value (onInit?)
   private posts: Post[] = []
 
   constructor(
     private userService: UserService,
     private authService: AuthService
   ) {
+
     const isLoggedIn = this.authService.isLoggedIn();
     // this.currentUser = userService.getUser(); //idk, honestly...
   }

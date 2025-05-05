@@ -31,7 +31,7 @@ export class AuthService {
   ) {
     this.currentUser = authState(this.auth);
   }
-  
+
   signIn(email: string, password: string): Promise<UserCredential> {
     return signInWithEmailAndPassword(this.auth, email, password);
   }

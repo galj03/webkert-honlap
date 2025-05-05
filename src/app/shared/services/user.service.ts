@@ -23,4 +23,15 @@ export class UserService {
 
     return userData;
   }
+
+  async getUserById(userId: string): Promise<User | null> {
+    const userDocRef = doc(this.firestore, USER_COLLECTION, userId);
+    const userDoc = await getDoc(userDocRef);
+    if (!userDoc.exists()) {
+      return null;
+    }
+    const userData = userDoc.data() as User;
+
+    return userData;
+  }
 }

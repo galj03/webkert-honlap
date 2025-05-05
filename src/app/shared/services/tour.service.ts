@@ -10,7 +10,7 @@ import { UserService } from './user.service';
   providedIn: 'root'
 })
 export class TourService{
-  private currentTour: Tour; //idk, assign this somehow
+  private currentTour?: Tour;  //TODO: get value (onInit?)
 
   constructor(
     private authService: AuthService,
