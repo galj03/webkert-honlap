@@ -1,5 +1,5 @@
 export interface Tour{
-    id: number,
+    id: string,
     title: string,
     startYear: number,
     endYear: number

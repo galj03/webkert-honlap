@@ -1,9 +1,9 @@
 import { Tour } from "./Tour";
 
 export interface Concert{
-    id: number,
+    id: string,
     venue: string;
     place: string;
-    date: Date;
-    tour: Tour
+    date: Date; //TODO: string in firestore
+    tour: string //Tour // number
 }
