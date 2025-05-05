@@ -11,6 +11,10 @@
   
     @if (showForm) {
       <form [formGroup]="signUpForm" (ngSubmit)="signup()" class="signup-form">
+        @if (signupError){
+          <div style="color: red;">{{ signupError }}</div>
+        }
+
         <mat-form-field appearance="outline">
             <mat-label>Email</mat-label>
             <input matInput type="email" formControlName="email">

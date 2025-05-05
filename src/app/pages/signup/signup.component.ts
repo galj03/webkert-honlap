@@ -8,6 +8,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { User } from '../../shared/models/User';
+import { AuthService } from '../../shared/services/auth.service';
 
 @Component({
   selector: 'app-signup',
@@ -33,7 +34,9 @@ export class SignupComponent implements OnInit{
 
   constructor(
     private fb: FormBuilder,
-    private router: Router) {}
+    private router: Router,
+    private authService: AuthService
+  ) {}
 
   ngOnInit(): void {
     this.signUpForm = this.fb.group({
@@ -63,21 +66,41 @@ export class SignupComponent implements OnInit{
     this.isLoading = true;
     this.showForm = false;
 
-    //TODO: firestore
-    const newUser: User = {
+    const newUser: Partial<User> = {
       name: {
         firstName: this.signUpForm.value.name?.firstName || '',
         lastName: this.signUpForm.value.name?.lastName || ''
       },
       email: this.signUpForm.value.email || '',
-      password: this.signUpForm.value.password || ''
+      password: this.signUpForm.value.password || '',
     };
+    const email = this.signUpForm.value.email || '';
+    const pw = this.signUpForm.value.password || '';
 
-    console.log('New user:', newUser);
-    console.log('Form value:', this.signUpForm.value);
-
-    setTimeout(() => {
-      this.router.navigateByUrl('/home');
-    }, 1000);
+    this.authService.signUp(email, pw, newUser)
+      .then(userCredential => {
+        console.log('Registration succesful:', userCredential.user);
+        this.authService.updateLoginStatus(true);
+        this.router.navigateByUrl('/home');
+      })
+      .catch(error => {
+        console.error('Regisztrációs hiba:', error);
+        this.isLoading = false;
+        this.showForm = true;
+        
+        switch(error.code) {
+          case 'auth/email-already-in-use':
+            this.signupError = 'Ez az email cím már használatban van.';
+            break;
+          case 'auth/invalid-email':
+            this.signupError = 'Hibás email.';
+            break;
+          case 'auth/weak-password':
+            this.signupError = 'A jelszó túl gyenge. Használjon legalább 6 karaktert.';
+            break;
+          default:
+            this.signupError = 'Hiba lépett fel a regisztráció közben. Kérjük, próbálja újra később.';
+        }
+      });
   }
 }

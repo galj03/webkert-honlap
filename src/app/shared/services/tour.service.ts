@@ -1,30 +1,69 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnInit } from '@angular/core';
 import { Tour } from '../models/Tour';
-import { collection, query, getDocs, Firestore } from '@angular/fire/firestore';
-import { Observable, switchMap, of } from 'rxjs';
+import { collection, query, getDocs, Firestore, addDoc, updateDoc, where, limit } from '@angular/fire/firestore';
+import { Observable, switchMap, of, firstValueFrom, take } from 'rxjs';
 import { TOUR_COLLECTION } from '../constants/constants';
 import { AuthService } from './auth.service';
-import { UserService } from './user.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class TourService{
-  private currentTour?: Tour;  //TODO: get value (onInit?)
+export class TourService implements OnInit{
+  private currentTour?: Tour;
 
   constructor(
     private authService: AuthService,
-    private userService: UserService,
     private firestore: Firestore
-  ) {
-    var temp: Tour;
-    this.getAllTours().forEach(t =>
-    {
-      temp = t[0];
-    })
-    .then(() => {
-      this.currentTour = temp;
-    });
+  ) { }
+
+  async ngOnInit(): Promise<void> {
+    await this.initCurrentTour();
+  }
+
+  async initCurrentTour(): Promise<Tour> {
+    try{
+    const tours = await firstValueFrom(this.getAllTours().pipe(take(1)));
+      if(!tours.at(0)){
+        console.error('No tour found.');
+      }
+      return tours.at(0) as Tour;
+    }
+    catch (error) {
+      console.error('Error fetching tours.', error);
+    }
+
+    return null as unknown as Tour;
+  }
+
+  //CREATE
+  async addTour(tour: Omit<Tour, 'id'>): Promise<Tour> {
+        try {
+          const user = await firstValueFrom(this.authService.currentUser.pipe(take(1)));
+          if (!user) {
+            throw new Error('No authenticated user found');
+          }
+    
+          const tourCollection = collection(this.firestore, TOUR_COLLECTION);
+          
+          const tourToSave = {
+            ...tour
+          };
+          
+          const docRef = await addDoc(tourCollection, tourToSave);
+          const tourId = docRef.id;
+          
+          await updateDoc(docRef, { id: tourId });
+          
+          const newTour = {
+            ...tourToSave,
+            id: tourId
+          } as Tour;
+    
+          return newTour;
+        } catch (error) {
+          console.error('Error adding task:', error);
+          throw error;
+        }
   }
 
   //READ
@@ -57,14 +96,47 @@ export class TourService{
         }),
         switchMap(concerts => concerts)
       );
+  }
+
+  async getCurrentTour(): Promise<Tour> {
+    if(!this.currentTour){
+      await this.initCurrentTour().then(t =>{
+        this.currentTour = t;
+        return this.currentTour as Tour;
+      });
     }
 
-  getCurrentTour(): Tour {
-    throw new Error('Method not implemented.');
+    return this.currentTour as Tour;
+  }
+
+  async getTourByTitle(title: string): Promise<Tour>{
+    try{
+      const tourCollection = collection(this.firestore, TOUR_COLLECTION);
+      const q = query(tourCollection,
+                      where('title', '==', title),
+                      limit(1)); // komplex query
+      const querySnapshot = await getDocs(q);
+      
+      querySnapshot.forEach(doc => {
+        return { ...doc.data(), id: doc.id } as Tour;
+      });
+    }
+    catch (error) {
+      console.error('Error fetching tours.', error);
+    }
+
+    return null as unknown as Tour; // TODO: fix!!!
   }
 
   //UPDATE
-  updateCurrentTour(selectedTour: string) {
-    throw new Error('Method not implemented.');
+  async updateCurrentTour(selectedTour: string) {
+    const tour = await this.getTourByTitle(selectedTour)
+    this.currentTour = tour;
+    console.log(tour);
+    console.log(this.currentTour);
+    
   }
+
+  //TODO
+  //DELETE
 }

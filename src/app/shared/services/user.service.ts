@@ -13,15 +13,12 @@ export class UserService {
       private firestore: Firestore
     ) { }
 
-  async getUser(user: FirebaseUser): Promise<User | null> {
-    const userDocRef = doc(this.firestore, USER_COLLECTION, user.uid);
-    const userDoc = await getDoc(userDocRef);
-    if (!userDoc.exists()) {
+  async getUser(user: FirebaseUser | null): Promise<User | null> {
+    if(user == null){
       return null;
     }
-    const userData = userDoc.data() as User;
 
-    return userData;
+    return this.getUserById(user.uid);
   }
 
   async getUserById(userId: string): Promise<User | null> {

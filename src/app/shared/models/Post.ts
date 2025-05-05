@@ -4,6 +4,6 @@ export interface Post{
     id: string,
     title: string,
     content: string,
-    postedBy: string, //User,//string
+    postedBy: User, //User,//string
     date: Date; //TODO: string in firestore
 }

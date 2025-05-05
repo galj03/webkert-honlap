@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Tour } from '../models/Tour';
 import { Concert } from '../models/Concert';
 import { Observable, of, switchMap, firstValueFrom, take } from 'rxjs';
-import { collection, query, where, getDocs, Firestore, addDoc, updateDoc } from '@angular/fire/firestore';
+import { collection, query, where, getDocs, Firestore, addDoc, updateDoc, orderBy } from '@angular/fire/firestore';
 import { AuthService } from './auth.service';
 import { CONCERT_COLLECTION } from '../constants/constants';
 import { TourService } from './tour.service';
@@ -78,20 +78,16 @@ export class ConcertService {
           return of([]);
         }
         try {
-          const userData = this.userService.getUser(user);
-
           const concertCollection = collection(this.firestore, CONCERT_COLLECTION);
           const concerts: Concert[] = [];
 
-          const q = query(concertCollection);
+          const q = query(concertCollection, orderBy('date', 'asc'));
           const querySnapshot = await getDocs(q);
           querySnapshot.forEach(doc => {
             concerts.push({ ...doc.data(), id: doc.id } as Concert);
           });
 
-          return of(concerts.sort((a, b) => {
-            return a.date.toLocaleString().localeCompare(b.date.toLocaleString());
-          }));
+          return of(concerts);
         } catch (error) {
           console.error('Error fetching concerts:', error);
           return of([]);
@@ -108,20 +104,18 @@ export class ConcertService {
           return of([]);
         }
         try {
-          const userData = this.userService.getUser(user);
-
           const concertCollection = collection(this.firestore, CONCERT_COLLECTION);
           const concerts: Concert[] = [];
 
-          const q = query(concertCollection, where('tour', '==', currentTour.id)); // komplex query
+          const q = query(concertCollection,
+                          where('tour', '==', currentTour.id),
+                          orderBy('date', 'asc')); // komplex query
           const querySnapshot = await getDocs(q);
           querySnapshot.forEach(doc => {
             concerts.push({ ...doc.data(), id: doc.id } as Concert);
           });
 
-          return of(concerts.sort((a, b) => {
-            return a.date.toLocaleString().localeCompare(b.date.toLocaleString());
-          }));
+          return of(concerts);
         } catch (error) {
           console.error('Error fetching concerts:', error);
           return of([]);

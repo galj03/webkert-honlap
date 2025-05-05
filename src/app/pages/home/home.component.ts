@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatInputModule } from '@angular/material/input';
@@ -15,6 +15,9 @@ import { User } from '../../shared/models/User';
 import { PostService } from '../../shared/services/post.service';
 import { PostDateFormatterPipe } from '../../shared/pipes/post_date.pipe';
 import { MatDivider } from '@angular/material/divider';
+import { firstValueFrom, Subscription, take } from 'rxjs';
+import { UserService } from '../../shared/services/user.service';
+import { AuthService } from '../../shared/services/auth.service';
 
 @Component({
   selector: 'app-home',
@@ -36,29 +39,39 @@ import { MatDivider } from '@angular/material/divider';
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent implements OnInit, OnDestroy {
   //@Input() isLoggedIn: boolean = false; //TODO: get value
   postForm!: FormGroup;
   isExpanded: 'expanded' | 'not-expanded' = 'expanded';
   isLoading: boolean = false;
   posts: Post[] = [];
-  currentUser: User = {
-    email: "testadmin@gmail.com",
-    name: {
-      firstName: "Adminus",
-      lastName: "Testinus"
-    },
-    password: "some secure password"
-  };
+  currentUser?: User | null;
+
+  private subscriptions: Subscription[] = [];
 
 constructor(
     private fb: FormBuilder,
-    private postSevice: PostService
+    private postSevice: PostService,
+    private userService: UserService,
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void {
     this.initializeForm();
     this.loadPosts();
+    this.getCurrentUser();
+  }
+  
+  async getCurrentUser() {
+    const user = await firstValueFrom(this.authService.currentUser.pipe(take(1)));
+      this.userService.getUser(user)
+      .then(u => {
+        this.currentUser = u;
+      });
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.forEach(sub => sub.unsubscribe());
   }
 
   initializeForm(): void {
@@ -69,8 +82,20 @@ constructor(
   }
 
   loadPosts(): void {
-    this.posts = this.postSevice.getAllPosts();
-    console.log("Posts loaded.");
+    const subscription = this.postSevice.getAllPosts()
+    .subscribe({
+      next: (posts) => {
+          this.posts = posts;
+          console.log('Posts loaded with observable');
+        },
+      error: (error) => {
+        console.error('Error loading posts:', error);
+        this.isLoading = false;
+        // this.showNotification('Error loading posts', 'error');
+      }
+    });
+
+    this.subscriptions.push(subscription);
   }
 
   addPost(): void {
@@ -81,7 +106,7 @@ constructor(
         const newPost: Omit<Post, 'id'> = {
           title: formValue.title,
           content: formValue.content,
-          postedBy: this.currentUser,
+          postedBy: this.currentUser as User,
           date: new Date(Date.now())
         };
         

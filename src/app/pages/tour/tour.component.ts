@@ -15,7 +15,7 @@ import { ConcertService } from '../../shared/services/concert.service';
 import { Tour } from '../../shared/models/Tour';
 import { ConcertDateFormatterPipe } from '../../shared/pipes/concert_date.pipe';
 import { MatIconModule } from '@angular/material/icon';
-import { Observable, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { TourService } from '../../shared/services/tour.service';
 
 @Component({
@@ -43,19 +43,14 @@ export class TourComponent implements OnInit, OnDestroy {
   concertForm!: FormGroup;
   concerts: Concert[] = [];
   isLoading = false;
+
   private subscriptions: Subscription[] = [];
 
-  //TODO: load these from service later
-  selectedTour: string = "Test Tour";
-  tourNames: string[] = ["Test Tour"];
-  currentTour: Tour = {
-      id: '1',
-      title: "Test Tour",
-      startYear: 2024,
-      endYear: 2025
-  }
-  tours: Tour[] = [this.currentTour];
-  title: string = this.currentTour.title;
+  selectedTour: string = '';
+  tourNames: string[] = [];
+  currentTour?: Tour;
+  tours: Tour[] = [];
+  title: string = '';
 
   constructor(
     private fb: FormBuilder,
@@ -65,7 +60,36 @@ export class TourComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.initializeForm();
-    this.loadConcerts();
+    this.loadTourData();
+  }
+
+  loadTourData() {
+    this.tourService.getCurrentTour()
+    .then(t => {
+      this.currentTour = t;
+      this.title = t.title;
+      console.log("Selected tour: ", this.currentTour);
+
+      this.loadConcerts();
+    })
+    .catch(e =>{
+      console.error(e);
+    });
+
+    const subscription = this.tourService.getAllTours()
+    .subscribe({
+      next: (tours) => {
+          this.tours = tours;
+          this.tourNames = tours.map(t => t.title);
+          console.log('Tours loaded with observable');
+        },
+      error: (error) => {
+        console.error('Error loading tours:', error);
+        this.isLoading = false;
+        // this.showNotification('Error loading tours', 'error');
+      }
+    });
+    this.subscriptions.push(subscription);
   }
 
   ngOnDestroy(): void {
@@ -82,26 +106,34 @@ export class TourComponent implements OnInit, OnDestroy {
   }
 
   loadConcerts(): void {
-    const subscription = this.concertService.getAllConcertsFromTour(this.currentTour)
+    const subscription = this.concertService.getAllConcertsFromTour(this.currentTour!)
     .subscribe({
       next: (concerts) => {
           this.concerts = concerts;
-          console.log('Tasks loaded with observable');
+          console.log('Concerts loaded with observable');
         },
       error: (error) => {
-        console.error('Error loading tasks:', error);
+        console.error('Error loading concerts:', error);
         this.isLoading = false;
-        // this.showNotification('Error loading tasks', 'error');
+        // this.showNotification('Error loading concerts', 'error');
       }
     });
 
     this.subscriptions.push(subscription);
   }
 
-  refreshTour(): void{
-    this.tourService.updateCurrentTour(this.selectedTour);
-    this.currentTour = this.tourService.getCurrentTour();
-    console.log("Selected tour: ", this.currentTour);
+  //TODO: these are not getting updated
+  async refreshTour() {
+    this.tourService.updateCurrentTour(this.selectedTour)
+    .then(() =>{
+      this.tourService.getCurrentTour()
+      .then(t => {
+        this.currentTour = t;
+        this.title = t.title;
+        this.loadConcerts();
+        console.log("Selected tour: ", this.currentTour);
+      });
+    });
   }
 
   addConcert(): void {
@@ -113,7 +145,7 @@ export class TourComponent implements OnInit, OnDestroy {
         venue: formValue.venue,
         place: formValue.place,
         date: formValue.concertDate,
-        tour: this.currentTour.id
+        tour: this.currentTour!.id
       };
       
 
