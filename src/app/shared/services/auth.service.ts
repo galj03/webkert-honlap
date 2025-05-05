@@ -43,6 +43,7 @@ export class AuthService {
     });
   }
 
+  //TODO: connect to signup page
   async signUp(email: string, password: string, userData: Partial<User>): Promise<UserCredential> {
     try {
       const userCredential = await createUserWithEmailAndPassword(

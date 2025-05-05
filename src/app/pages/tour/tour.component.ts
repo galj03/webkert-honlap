@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatInputModule } from '@angular/material/input';
@@ -15,6 +15,8 @@ import { ConcertService } from '../../shared/services/concert.service';
 import { Tour } from '../../shared/models/Tour';
 import { ConcertDateFormatterPipe } from '../../shared/pipes/concert_date.pipe';
 import { MatIconModule } from '@angular/material/icon';
+import { Observable, Subscription } from 'rxjs';
+import { TourService } from '../../shared/services/tour.service';
 
 @Component({
   selector: 'app-tour',
@@ -36,17 +38,18 @@ import { MatIconModule } from '@angular/material/icon';
   templateUrl: './tour.component.html',
   styleUrl: './tour.component.scss'
 })
-export class TourComponent implements OnInit{
+export class TourComponent implements OnInit, OnDestroy {
   displayedColumns: string[] = ['venue', 'place', 'date', 'actions'];
   concertForm!: FormGroup;
   concerts: Concert[] = [];
   isLoading = false;
+  private subscriptions: Subscription[] = [];
 
   //TODO: load these from service later
   selectedTour: string = "Test Tour";
   tourNames: string[] = ["Test Tour"];
   currentTour: Tour = {
-      id: 1,
+      id: '1',
       title: "Test Tour",
       startYear: 2024,
       endYear: 2025
@@ -56,12 +59,17 @@ export class TourComponent implements OnInit{
 
   constructor(
     private fb: FormBuilder,
-    private concertService: ConcertService
+    private concertService: ConcertService,
+    private tourService: TourService
   ) {}
 
   ngOnInit(): void {
     this.initializeForm();
     this.loadConcerts();
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.forEach(sub => sub.unsubscribe());
   }
 
   initializeForm(): void {
@@ -74,19 +82,26 @@ export class TourComponent implements OnInit{
   }
 
   loadConcerts(): void {
-    this.concerts = this.concertService.getAllFromTour(this.currentTour);
-    console.log("Concerts loaded.");
-    // .subscribe(concerts => {
-    //   this.concerts = concerts;
-    //   console.log('Tasks loaded with observable');
-    // });
+    const subscription = this.concertService.getAllConcertsFromTour(this.currentTour)
+    .subscribe({
+      next: (concerts) => {
+          this.concerts = concerts;
+          console.log('Tasks loaded with observable');
+        },
+      error: (error) => {
+        console.error('Error loading tasks:', error);
+        this.isLoading = false;
+        // this.showNotification('Error loading tasks', 'error');
+      }
+    });
+
+    this.subscriptions.push(subscription);
   }
 
   refreshTour(): void{
-    //TODO: connect with service (and firebase, later)
-    // this.tourService.updateCurrentTour(this.selectedTour);
-    // this.currentTour = this.tourService.getCurrentTour();
-    console.log("Selected tour: ", this.selectedTour);
+    this.tourService.updateCurrentTour(this.selectedTour);
+    this.currentTour = this.tourService.getCurrentTour();
+    console.log("Selected tour: ", this.currentTour);
   }
 
   addConcert(): void {
@@ -98,7 +113,7 @@ export class TourComponent implements OnInit{
         venue: formValue.venue,
         place: formValue.place,
         date: formValue.concertDate,
-        tour: this.currentTour
+        tour: this.currentTour.id
       };
       
 

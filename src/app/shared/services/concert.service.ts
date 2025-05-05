@@ -1,75 +1,73 @@
 import { Injectable } from '@angular/core';
 import { Tour } from '../models/Tour';
 import { Concert } from '../models/Concert';
-import { Observable, BehaviorSubject, of, switchMap } from 'rxjs';
-import { doc, getDoc, collection, query, where, getDocs, Firestore } from '@angular/fire/firestore';
-import { User } from '../models/User';
+import { Observable, of, switchMap, firstValueFrom, take } from 'rxjs';
+import { collection, query, where, getDocs, Firestore, addDoc, updateDoc } from '@angular/fire/firestore';
 import { AuthService } from './auth.service';
-import { CONCERT_COLLECTION, USER_COLLECTION } from '../constants/constants';
-import { User as FirebaseUser } from '@angular/fire/auth';
+import { CONCERT_COLLECTION } from '../constants/constants';
+import { TourService } from './tour.service';
+import { UserService } from './user.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ConcertService {
-  private currentTour: Tour = {
-      id: '1',
-      title: "Test Tour",
-      startYear: 2024,
-      endYear: 2025
-  }
-  private concerts: Concert[] = [
-    {
-      id: '1',
-      venue: "Budapest Park",
-      place: "Budapest, Hungary",
-      date: new Date('2025-06-25'),
-      tour: this.currentTour.id
-    },
-    {
-      id: '2',
-      venue: "Puskás Aréna",
-      place: "Budapest, Hungary",
-      date: new Date('2025-06-26'),
-      tour: this.currentTour.id
-    },
-    {
-      id: '3',
-      venue: "Pick Aréna",
-      place: "Szeged, Hungary",
-      date: new Date('2025-07-05'),
-      tour: this.currentTour.id
-    },
-  ]
 
   constructor(
     private authService: AuthService,
-    private firestore: Firestore
+    private firestore: Firestore,
+    private tourService: TourService,
+    private userService: UserService
   ) { }
 
   // private concertsSubject = new BehaviorSubject<Concert[]>(this.concerts);
+  private formatDateToString(date: Date | string): string {
+    if (typeof date === 'string') {
+      const dateObj = new Date(date);
+      if (isNaN(dateObj.getTime())) {
+        return new Date().toISOString().split('T')[0];
+      }
+      return date.includes('T') ? date.split('T')[0] : date;
+    }
+    if (date instanceof Date) {
+      return date.toISOString().split('T')[0];
+    }
+    return new Date().toISOString().split('T')[0];
+  }
 
   //CREATE
-  //TODO
-  addConcert(concert: Omit<Concert, 'id'>): Promise<Concert> {
-    return new Promise((resolve) => {
-      const newId = this.concerts.length > 0 
-        ? Math.max(...this.concerts.map(c => c.id)) + 1 
-        : 1;
+  async addConcert(concert: Omit<Concert, 'id'>): Promise<Concert> {
+    try {
+      const user = await firstValueFrom(this.authService.currentUser.pipe(take(1)));
+      if (!user) {
+        throw new Error('No authenticated user found');
+      }
+
+      //TODO: check if date is between tour start and end dates
+
+      const concertCollection = collection(this.firestore, CONCERT_COLLECTION);
       
-      const newConcert: Concert = {
+      const concertToSave = {
         ...concert,
-        id: newId
+        date: this.formatDateToString(concert.date)
       };
       
-      this.concerts.push(newConcert);
+      const docRef = await addDoc(concertCollection, concertToSave);
+      const concertId = docRef.id;
       
-      //this.tasksSubject.next([...this.tasks]);
+      await updateDoc(docRef, { id: concertId });
       
-      setTimeout(() => {
-        resolve(newConcert);
-      }, 1000);
-    });
+      const newConcert = {
+        ...concertToSave,
+        id: concertId,
+        date: new Date(concertToSave.date)
+      } as Concert;
+
+      return newConcert;
+    } catch (error) {
+      console.error('Error adding task:', error);
+      throw error;
+    }
   }
 
   //READ
@@ -80,7 +78,7 @@ export class ConcertService {
           return of([]);
         }
         try {
-          const userData = this.getUser(user);
+          const userData = this.userService.getUser(user);
 
           const concertCollection = collection(this.firestore, CONCERT_COLLECTION);
           const concerts: Concert[] = [];
@@ -110,7 +108,7 @@ export class ConcertService {
           return of([]);
         }
         try {
-          const userData = this.getUser(user);
+          const userData = this.userService.getUser(user);
 
           const concertCollection = collection(this.firestore, CONCERT_COLLECTION);
           const concerts: Concert[] = [];
@@ -132,16 +130,10 @@ export class ConcertService {
       switchMap(concerts => concerts)
     );
   }
-  
-  //UTILS
-  async getUser(user: FirebaseUser): Promise<User | null> {
-    const userDocRef = doc(this.firestore, USER_COLLECTION, user.uid);
-    const userDoc = await getDoc(userDocRef);
-    if (!userDoc.exists()) {
-      return null;
-    }
-    const userData = userDoc.data() as User;
 
-    return userData;
-  }
+  //TODO
+  //UPDATE
+
+  //TODO
+  //DELETE
 }
