@@ -22,13 +22,15 @@ export class UserService {
   }
 
   async getUserById(userId: string): Promise<User | null> {
+    return new Promise(async (resolve, reject) => {
     const userDocRef = doc(this.firestore, USER_COLLECTION, userId);
     const userDoc = await getDoc(userDocRef);
     if (!userDoc.exists()) {
-      return null;
+      reject(new Error('User not found: '+ userId));
     }
     const userData = userDoc.data() as User;
 
-    return userData;
+    resolve(userData);
+    });
   }
 }

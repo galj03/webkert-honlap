@@ -44,7 +44,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   postForm!: FormGroup;
   isExpanded: 'expanded' | 'not-expanded' = 'expanded';
   isLoading: boolean = false;
-  posts: Post[] = [];
+  posts: { post: Post, poster: User }[] = [];
   currentUser?: User | null;
 
   private subscriptions: Subscription[] = [];

@@ -47,19 +47,19 @@
             @for (post of posts; track $index) {
                     <mat-card class="post-card">
                         <mat-card-header>
-                            <mat-card-title>{{ post.title }}</mat-card-title>
+                            <mat-card-title>{{ post.post.title }}</mat-card-title>
                         </mat-card-header>
                         
                         <mat-card-content>
                             <div class="post-text">
-                                {{ post.content }}
+                                {{ post.post.content }}
                             </div>
                             <mat-divider></mat-divider>
                         </mat-card-content>
 
                         <mat-card-footer>
-                            <div>{{ post.postedBy.name.lastName }} {{post.postedBy.name.firstName}}</div>
-                            <div>{{ post.date | postDateFormatter}}</div>
+                            <div>{{ post.poster.name.lastName }} {{post.poster.name.firstName}}</div>
+                            <div>{{ post.post.date | postDateFormatter}}</div>
                         </mat-card-footer>
                     </mat-card>
             }

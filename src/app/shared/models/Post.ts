@@ -7,3 +7,11 @@ export interface Post{
     postedBy: User, //User,//string
     date: Date; //TODO: string in firestore
 }
+
+export interface FirebasePost{
+    id: string,
+    title: string,
+    content: string,
+    postedBy: string,
+    date: Date;
+}

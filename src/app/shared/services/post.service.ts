@@ -1,10 +1,10 @@
 import { Injectable, OnInit } from '@angular/core';
-import { Post } from '../models/Post';
+import { FirebasePost, Post } from '../models/Post';
 import { User } from '../models/User';
 import { UserService } from './user.service';
 import { AuthService } from './auth.service';
-import { collection, addDoc, updateDoc, Firestore, getDocs, query, orderBy } from '@angular/fire/firestore';
-import { firstValueFrom, Observable, of, switchMap, take } from 'rxjs';
+import { collection, addDoc, updateDoc, Firestore, getDocs, query, orderBy, collectionData } from '@angular/fire/firestore';
+import { first, firstValueFrom, map, Observable, of, Subscriber, switchMap, take, from } from 'rxjs';
 import { POST_COLLECTION } from '../constants/constants';
 
 @Injectable({
@@ -77,36 +77,52 @@ export class PostService implements OnInit {
   }
   
   //READ
-  getAllPosts(): Observable<Post[]> {
-      return this.authService.currentUser.pipe(
-        switchMap(async user => {
-          if (!user) {
-            return of([]);
-          }
+  //   getAllPosts(): Observable<{
+  //   post:Post,
+  //   poster: User
+  // }[]> {
+      // return collectionData(collection(this.firestore, 'POST_COLLECTION')).pipe(
+      //   // turn off
+      //   first(),
+      //   map((doc: any) => {
+      //       return { ...doc.data(), id: doc.id, /*postedBy: poster*/ } as Post;
+      //   })
+      // );
+
+  getAllPosts(): Observable<{
+    post:Post,
+    poster: User
+  }[]> {
+      return from(new Promise<{
+              post:Post,
+              poster: User
+            }[]>(async (resolve, reject) => {
           try {
             const postCollection = collection(this.firestore, POST_COLLECTION);
-            const posts: Post[] = [];
+            const posts: {
+              post:Post,
+              poster: User
+            }[] = [];
   
             const q = query(postCollection, orderBy('date', 'desc'));
             const querySnapshot = await getDocs(q);
-            querySnapshot.forEach(doc => {
-              //TODO: fix, this will fail...
-              // var poster : User;
-              // this.userService.getUserById(doc.data().postedBy)//pfffff
-              // .then(u =>{
-              //   poster = u as User;
-              // });
-              posts.push({ ...doc.data(), id: doc.id, /*postedBy: poster*/ } as Post);
-            });
-  
-            return of(posts);
+              querySnapshot.forEach(async doc => {
+                const post = { ...doc.data(), id: doc.id } as FirebasePost;
+                var poster : User;
+                var u = await this.userService.getUserById(post.postedBy);
+                  poster = u as User;
+
+                  posts.push({post: { ...doc.data(), id: doc.id } as Post,
+                    poster: poster as User});
+              });
+    
+              resolve(posts);
+            
           } catch (error) {
-            console.error('Error fetching concerts:', error);
-            return of([]);
+            console.error('Error fetching posts:', error);
+            reject(error);
           }
-        }),
-        switchMap(posts => posts)
-      );
+      }));
     }
 
   //TODO
