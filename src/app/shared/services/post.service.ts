@@ -115,7 +115,7 @@ export class PostService implements OnInit {
                 var u = await this.userService.getUserById(post.postedBy);
                   poster = u as User;
 
-                  posts.push({post: { ...doc.data(), id: doc.id } as Post,
+                  posts.push({post: { ...doc.data(), id: doc.id, date: new Date(post.date) } as Post,
                     poster: poster as User});
               });
     

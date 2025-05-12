@@ -13,5 +13,5 @@ export interface FirebasePost{
     title: string,
     content: string,
     postedBy: string,
-    date: Date;
+    date: string;
 }

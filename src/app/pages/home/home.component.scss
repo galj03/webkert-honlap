@@ -231,6 +231,7 @@ mat-card-footer > div {
     text-align: left;
 
     margin: 10px 0;
+    background-color: #3a3a3a;
 }
 
 .post-text {
@@ -241,6 +242,10 @@ mat-card-footer > div {
 
 .not-expanded {
     display: none;
+}
+
+.expanded{
+  background-color: #500f0f;
 }
 
 .button-group button {

@@ -40,7 +40,7 @@ import { AuthService } from '../../shared/services/auth.service';
   styleUrl: './home.component.scss'
 })
 export class HomeComponent implements OnInit, OnDestroy {
-  //@Input() isLoggedIn: boolean = false; //TODO: get value
+  isLoggedIn: boolean = false;
   postForm!: FormGroup;
   isExpanded: 'expanded' | 'not-expanded' = 'expanded';
   isLoading: boolean = false;
@@ -67,6 +67,8 @@ constructor(
       this.userService.getUser(user)
       .then(u => {
         this.currentUser = u;
+        this.isLoggedIn = u !== null;
+        console.log('Current user:', this.currentUser);
       });
   }
 
