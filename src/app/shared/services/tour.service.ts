@@ -37,6 +37,7 @@ export class TourService implements OnInit{
 
   //CREATE
   async addTour(tour: Omit<Tour, 'id'>): Promise<Tour> {
+    return new Promise(async (resolve) => {
         try {
           const user = await firstValueFrom(this.authService.currentUser.pipe(take(1)));
           if (!user) {
@@ -59,11 +60,12 @@ export class TourService implements OnInit{
             id: tourId
           } as Tour;
     
-          return newTour;
+          resolve(newTour);
         } catch (error) {
           console.error('Error adding task:', error);
           throw error;
         }
+      });
   }
 
   //READ
@@ -99,43 +101,42 @@ export class TourService implements OnInit{
   }
 
   async getCurrentTour(): Promise<Tour> {
+    return new Promise((resolve) => {
     if(!this.currentTour){
-      await this.initCurrentTour().then(t =>{
+      this.initCurrentTour().then(t =>{
         this.currentTour = t;
-        return this.currentTour as Tour;
+        resolve(this.currentTour as Tour);
       });
     }
 
-    return this.currentTour as Tour;
+    resolve(this.currentTour as Tour);
+    });
   }
 
   async getTourByTitle(title: string): Promise<Tour>{
-    try{
-      const tourCollection = collection(this.firestore, TOUR_COLLECTION);
-      const q = query(tourCollection,
-                      where('title', '==', title),
-                      limit(1)); // komplex query
-      const querySnapshot = await getDocs(q);
-      
-      querySnapshot.forEach(doc => {
-        return { ...doc.data(), id: doc.id } as Tour;
-      });
-    }
-    catch (error) {
-      console.error('Error fetching tours.', error);
-    }
+    return new Promise(async (resolve, reject) => {
+      try{
+        const tourCollection = collection(this.firestore, TOUR_COLLECTION);
+        const q = query(tourCollection,
+                        where('title', '==', title),
+                        limit(1)); // komplex query
+        const querySnapshot = await getDocs(q);
+        
+        querySnapshot.forEach(doc => {
+          console.log("asda");
+          resolve({ ...doc.data(), id: doc.id } as Tour);
+        });
+      }
+      catch (error) {
+        console.error('Error fetching tours.', error);
+      }
+  console.log("asd");
 
-    return null as unknown as Tour; // TODO: fix!!!
+      reject(null as unknown as Tour);
+    });
   }
 
   //UPDATE
-  async updateCurrentTour(selectedTour: string) {
-    const tour = await this.getTourByTitle(selectedTour)
-    this.currentTour = tour;
-    console.log(tour);
-    console.log(this.currentTour);
-    
-  }
 
   //TODO
   //DELETE

@@ -124,16 +124,9 @@ export class TourComponent implements OnInit, OnDestroy {
 
   //TODO: these are not getting updated
   async refreshTour() {
-    this.tourService.updateCurrentTour(this.selectedTour)
-    .then(() =>{
-      this.tourService.getCurrentTour()
-      .then(t => {
-        this.currentTour = t;
-        this.title = t.title;
+        this.currentTour = await this.tourService.getTourByTitle(this.selectedTour);
+        this.title = this.currentTour.title;
         this.loadConcerts();
-        console.log("Selected tour: ", this.currentTour);
-      });
-    });
   }
 
   addConcert(): void {
