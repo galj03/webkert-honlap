@@ -10,23 +10,12 @@ import { POST_COLLECTION } from '../constants/constants';
 @Injectable({
   providedIn: 'root'
 })
-export class PostService implements OnInit {
-  private currentUser?: User | null; //mire is kell ez???
-  private posts: Post[] = []
-
+export class PostService {
   constructor(
     private userService: UserService,
     private authService: AuthService,
     private firestore: Firestore
   ) { }
-
-  async ngOnInit(): Promise<void> {
-    const user = await firstValueFrom(this.authService.currentUser.pipe(take(1)));
-    this.userService.getUser(user)
-    .then(u => {
-      this.currentUser = u;
-    });
-  }
 
   private formatDateToString(date: Date | string): string {
     if (typeof date === 'string') {
@@ -41,7 +30,6 @@ export class PostService implements OnInit {
     }
     return new Date().toISOString().split('T')[0];
   }
-  // private concertsSubject = new BehaviorSubject<Concert[]>(this.concerts);
 
   //CREATE
   async addPost(post: Omit<Post, 'id'>): Promise<Post> {
@@ -80,18 +68,6 @@ export class PostService implements OnInit {
   }
   
   //READ
-  //   getAllPosts(): Observable<{
-  //   post:Post,
-  //   poster: User
-  // }[]> {
-      // return collectionData(collection(this.firestore, 'POST_COLLECTION')).pipe(
-      //   // turn off
-      //   first(),
-      //   map((doc: any) => {
-      //       return { ...doc.data(), id: doc.id, /*postedBy: poster*/ } as Post;
-      //   })
-      // );
-
   getAllPosts(): Observable<{
     post:Post,
     poster: User

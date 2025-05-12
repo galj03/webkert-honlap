@@ -186,6 +186,14 @@ p {
     mat-form-field {
         width: 100%;
         
+        mat-select{
+            color: #ff0000;
+        }
+
+        mat-option{
+            color: rgb(224, 6, 6) !important;
+        }
+        
         ::ng-deep {
             .mat-mdc-text-field-wrapper {
                 background-color: #3a3a3a;
@@ -254,6 +262,10 @@ p {
     background-color: $buttonHoverColor;
   }
   
+  #concerts-table, .mat-mdc-table {
+    background-color: #6e0606;
+  }
+
   .table-container {
     width: 100%;
     overflow-x: auto;

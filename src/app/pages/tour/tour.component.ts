@@ -39,7 +39,7 @@ import { TourService } from '../../shared/services/tour.service';
   styleUrl: './tour.component.scss'
 })
 export class TourComponent implements OnInit, OnDestroy {
-  displayedColumns: string[] = ['venue', 'place', 'date', 'actions'];
+  displayedColumns: string[] = ['venue', 'place', 'date', 'actions', 'delete-action'];
   concertForm!: FormGroup;
   concerts: Concert[] = [];
   isLoading = false;
