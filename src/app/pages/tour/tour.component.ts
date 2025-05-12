@@ -15,8 +15,10 @@ import { ConcertService } from '../../shared/services/concert.service';
 import { Tour } from '../../shared/models/Tour';
 import { ConcertDateFormatterPipe } from '../../shared/pipes/concert_date.pipe';
 import { MatIconModule } from '@angular/material/icon';
-import { Subscription } from 'rxjs';
+import { firstValueFrom, Subscription, take } from 'rxjs';
 import { TourService } from '../../shared/services/tour.service';
+import { UserService } from '../../shared/services/user.service';
+import { AuthService } from '../../shared/services/auth.service';
 
 @Component({
   selector: 'app-tour',
@@ -39,7 +41,10 @@ import { TourService } from '../../shared/services/tour.service';
   styleUrl: './tour.component.scss'
 })
 export class TourComponent implements OnInit, OnDestroy {
+  isLoggedIn: boolean = false;
   displayedColumns: string[] = ['venue', 'place', 'date', 'actions', 'delete-action'];
+  columnsWhenLoggedIn: string[] = ['venue', 'place', 'date', 'actions', 'delete-action'];
+  columnsWhenNotLoggedIn: string[] = ['venue', 'place', 'date'];
   concertForm!: FormGroup;
   concerts: Concert[] = [];
   isLoading = false;
@@ -55,12 +60,24 @@ export class TourComponent implements OnInit, OnDestroy {
   constructor(
     private fb: FormBuilder,
     private concertService: ConcertService,
-    private tourService: TourService
+    private tourService: TourService,
+    private authService: AuthService,
+    private userService: UserService
   ) {}
 
   async ngOnInit(): Promise<void> {
     this.initializeForm();
     await this.loadTourData();
+    const user = await firstValueFrom(this.authService.currentUser.pipe(take(1)));
+          this.userService.getUser(user)
+          .then(u => {
+            this.isLoggedIn = u !== null;
+            this.displayedColumns = this.isLoggedIn ? this.columnsWhenLoggedIn : this.columnsWhenNotLoggedIn;
+          })
+          .catch(error => {
+            console.error('Error fetching user:', error);
+            this.displayedColumns = this.columnsWhenNotLoggedIn;
+          });
   }
 
   async loadTourData() {
