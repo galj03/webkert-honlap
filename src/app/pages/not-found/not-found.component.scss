@@ -1,3 +1,10 @@
+body {
+    background-color: #121212; /* Dark background */
+    color: #ffffff; /* Light text */
+    margin: 0 !important;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
 .not-found-container {
   display: flex;
   justify-content: center;
@@ -23,14 +30,15 @@
   font-size: 64px;
   height: 64px;
   width: 64px;
-  color: #5a4af7;
+  color: #dc143c; /* Crimson color */
   margin-bottom: 16px;
 }
 
 h1 {
-  margin: 0 0 16px 0;
-  font-size: 32px;
-  color: #333;
+    color: #dc143c; /* Crimson color */
+    font-size: 36px;
+    margin-bottom: 16px;
+    font-weight: bold;
 }
 
 p {

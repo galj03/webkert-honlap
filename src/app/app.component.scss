@@ -1,3 +1,5 @@
+$secondary-bg: #4e1c1c; /* Secondary background for contrast */
+
 nav {
     display: flex;
     justify-content: flex-end;
@@ -15,19 +17,20 @@ ul {
 
 a {
     text-decoration: none;
-    color: white;
+    color: white; /* White text */
     font-size: 25px;
 }
 
 mat-sidenav-container {
     height: 100%;
+    background-color: $secondary-bg; /* Dark background matching the theme */
 }
 
-mat-toolbar{
-    background-color: #005cbb;
+mat-toolbar {
+    background-color: #dc143c; /* Crimson background */
     color: white;
     mat-icon {
-        color: white;
+        color: white; /* Ensure icons are pure white in the toolbar for maximum contrast */
     }
 }
 

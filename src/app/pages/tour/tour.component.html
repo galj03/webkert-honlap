@@ -10,7 +10,6 @@
                     <mat-label>Turné</mat-label>
                     <input #input
                             type="text"
-                            placeholder="Válassza ki a turnét"
                             matInput
                             [(ngModel)]="selectedTour"
                             [matAutocomplete]="auto">
@@ -29,7 +28,7 @@
             <div class="form-row">
             <mat-form-field appearance="outline" class="input">
                 <mat-label>Koncert helye (település)</mat-label>
-                <input matInput formControlName="place" placeholder="Hely">
+                <input matInput formControlName="place">
             </mat-form-field>
             
             <mat-form-field appearance="outline" class="priority-select">
@@ -55,7 +54,7 @@
             
             <mat-form-field appearance="outline" class="full-width">
             <mat-label>Koncert helyszíne</mat-label>
-            <input matInput formControlName="venue" placeholder="Helyszín">
+            <input matInput formControlName="venue">
             </mat-form-field>
         </form>
 

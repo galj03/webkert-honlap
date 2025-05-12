@@ -1,10 +1,286 @@
 /* You can add global styles to this file, and also import other style files */
+
+/* Enhanced Dark Theme Styles with Lighter Shades */
+$background-color: #4e1c1c; /* Secondary background for contrast */
+$card-bg: #333333; /* Lighter background for cards */
+$input-bg: #444444; /* Background color for inputs */
+$border-color: #555555; /* Lighter border color */
+$text-color: #ffffff; /* Light text */
+$muted-text: #cccccc; /* Lighter muted text for less emphasis */
+$accent-color: #dc143c; /* Crimson accent color */
+$buttonColor: #e10c0c;
+$buttonHoverColor: #6e0606;
+
 body {
+    background-color: #121212; /* Dark background */
+    color: #ffffff; /* Pure white text */
+    min-height: 100vhg;
     margin: 0 !important;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
-main{
+main {
     min-height: 85vh;
+    background-color: $background-color;
 }
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+html, body {
+    height: 100%;
+}
+
+form{
+    button[mat-flat-button] {
+        background-color: #dc143c; /* Crimson color */
+        color: white;
+        transition: background-color 0.3s;
+        
+        &:hover {
+            background-color: #b22222; /* Darker crimson on hover */
+        }
+        
+        &[routerLink] {
+            background-color: transparent;
+            border: 1px solid #dc143c;
+            color: #dc143c;
+            
+            &:hover {
+                background-color: rgba(220, 20, 60, 0.1);
+            }
+        }
+    }
+
+    /* Enhanced form field styling for dark theme */
+    mat-form-field {
+        width: 100%;
+        
+        ::ng-deep {
+            .mat-mdc-text-field-wrapper {
+                background-color: #3a3a3a;
+            }
+            
+            .mat-mdc-form-field-focus-overlay {
+                color: white;
+            }
+            
+            .mdc-text-field--filled:not(.mdc-text-field--disabled) {
+                color: white;
+            }
+            
+            .mdc-text-field--outlined .mdc-notched-outline .mdc-notched-outline__leading,
+            .mdc-text-field--outlined .mdc-notched-outline .mdc-notched-outline__trailing,
+            .mdc-text-field--outlined .mdc-notched-outline .mdc-notched-outline__notch {
+                border-color: rgba(255, 255, 255, 0.3);
+            }
+            
+            .mat-mdc-form-field-label {
+                color: white; /* Pure white label text */
+            }
+            
+            input.mat-mdc-input-element {
+                color: white;
+            }
+            
+            .mat-mdc-form-field.mat-focused .mat-mdc-form-field-label {
+                color: #dc143c;
+            }
+
+            /* Placeholder text - pure white */
+            mat-label {
+                color: white;
+                opacity: 1;
+            }
+            
+            /* Icons inside form fields */
+            .mat-mdc-form-field-icon-suffix mat-icon {
+                color: white; /* Pure white icon color */
+            }
+        }
+    }
+}
+
+a {
+    color: $accent-color; /* Crimson color for links */
+}
+
+    button[mat-flat-button] {
+        background-color: #dc143c; /* Crimson color */
+        color: white;
+        transition: $background-color 0.3s;
+        
+        &:hover {
+            background-color: #b22222; /* Darker crimson on hover */
+        }
+        
+        &[routerLink] {
+            background-color: transparent;
+            border: 1px solid #dc143c;
+            color: #dc143c;
+            
+            &:hover {
+                background-color: rgba(220, 20, 60, 0.1);
+            }
+        }
+    }
+
+    /* Enhanced form field styling for dark theme */
+    mat-form-field {
+        width: 100%;
+        
+        ::ng-deep {
+            .mat-mdc-text-field-wrapper {
+                background-color: #3a3a3a;
+            }
+            
+            .mat-mdc-form-field-focus-overlay {
+                color: white;
+            }
+            
+            .mdc-text-field--filled:not(.mdc-text-field--disabled) {
+                color: white;
+            }
+            
+            .mdc-text-field--outlined .mdc-notched-outline .mdc-notched-outline__leading,
+            .mdc-text-field--outlined .mdc-notched-outline .mdc-notched-outline__trailing,
+            .mdc-text-field--outlined .mdc-notched-outline .mdc-notched-outline__notch {
+                border-color: rgba(255, 255, 255, 0.3);
+            }
+            
+            .mat-mdc-form-field-label {
+                color: white; /* Pure white label text */
+            }
+            
+            input.mat-mdc-input-element {
+                color: white;
+            }
+            
+            .mat-mdc-form-field.mat-focused .mat-mdc-form-field-label {
+                color: #dc143c;
+            }
+
+            /* Placeholder text - pure white */
+            mat-label {
+                color: white;
+                opacity: 1;
+            }
+            
+            /* Icons inside form fields */
+            .mat-mdc-form-field-icon-suffix mat-icon {
+                color: white; /* Pure white icon color */
+            }
+        }
+    }
+
+/* Placeholder text styles - pure white */
+::placeholder,
+::-webkit-input-placeholder {
+    color: white !important; /* Pure white placeholder text */
+    opacity: 1 !important;
+}
+
+/* Input field styling for dark theme - pure white text */
+input.mat-input-element {
+    color: white !important;
+}
+
+/* Form field label - pure white */
+.mat-form-field-label {
+    color: white !important;
+}
+
+.mat-form-field-underline {
+    background-color: rgba(255, 255, 255, 0.5) !important;
+}
+
+/* When form field is focused */
+.mat-focused .mat-form-field-label {
+    color: #dc143c !important; /* Crimson accent */
+}
+
+.mat-form-field-ripple {
+    background-color: $accent-color !important; /* Crimson accent */
+}
+
+/* Material icon colors - ensure all are pure white */
+mat-icon {
+    color: white !important; /* Pure white icon color */
+}
+
+/* Ensure icons in Material components are visible enough */
+.mat-mdc-form-field-icon-suffix mat-icon,
+.mat-mdc-form-field-icon-prefix mat-icon,
+.mat-mdc-select-arrow,
+.mat-datepicker-toggle-default-icon,
+.mat-mdc-paginator-icon {
+    color: rgba(255, 255, 255, 0.9) !important; /* Lighter icon color */
+}
+
+/* Material theme overrides for dark mode */
+.mat-mdc-card {
+    background-color: $card-bg;
+    color: $text-color;
+}
+
+/* Material components text color */
+.mat-mdc-card-title,
+.mat-mdc-card-subtitle,
+.mat-mdc-list-item,
+.mat-mdc-option,
+.mat-mdc-select-value,
+.mat-mdc-form-field-label {
+    color: white !important;
+}
+
+/* Style for dropdown menus and panels */
+.mat-mdc-menu-panel,
+.mat-mdc-select-panel {
+    background-color: $input-bg;
+    
+    .mat-mdc-option {
+        color: $text-color;
+    }
+    
+    .mat-mdc-option:hover:not(.mat-mdc-option-disabled) {
+        background-color: rgba(220, 20, 60, 0.2);
+    }
+    
+    .mat-mdc-option.mat-mdc-selected:not(.mat-mdc-option-multiple):not(.mat-mdc-option-disabled) {
+        background-color: rgba(220, 20, 60, 0.3);
+    }
+}
+
+/* Button styling */
+.mat-mdc-raised-button.mat-primary,
+.mat-mdc-unelevated-button.mat-primary {
+    background-color: $accent-color;
+}
+
+.mat-mdc-outlined-button.mat-primary {
+    color: $accent-color;
+    border-color: $accent-color;
+}
+
+/* Dialog and panel text */
+.mat-mdc-dialog-container .mat-mdc-dialog-surface,
+.cdk-overlay-pane {
+    color: white;
+}
+
+/* Dropdown panel options */
+.mat-mdc-select-panel .mat-mdc-option .mdc-list-item__primary-text {
+    color: white;
+}
+
+/* Calendar text */
+.mat-calendar-body-cell-content,
+.mat-calendar-body-label,
+.mat-calendar-header {
+    color: white;
+}
+
+/* Table text */
+.mat-mdc-table {
+    .mat-mdc-header-cell,
+    .mat-mdc-cell {
+        color: white;
+    }
+}

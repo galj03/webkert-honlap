@@ -1,11 +1,11 @@
-$buttonColor: #5a4af7;
-$buttonHoverColor: #4a3cd6;
+$buttonColor: #e10c0c;
+$buttonHoverColor: #6e0606;
 
 .container {
     height: 100%;
     display: flex;
     flex-direction: column;
-    background-color: #fff;
+    background-color: #2a2a2a; /* Dark background matching the theme */
     border-radius: 8px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     padding: 40px 20px;
@@ -16,21 +16,20 @@ $buttonHoverColor: #4a3cd6;
 }
 
 h1 {
-    color: #333;
+    color: white;
     font-size: 36px;
     margin-bottom: 16px;
     font-weight: bold;
 }
 
 p {
-    color: #666;
+    color: #a19c9c;
     font-size: 20px;
     margin-bottom: 40px;
 }
 
 .clickbutton {
     background-color: $buttonColor;
-    width: 300px;
     margin: 0 auto;
     color: white;
     border: none;
@@ -51,94 +50,162 @@ p {
     margin: 20px auto;
     border-radius: 8px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  }
-  
-  mat-card-header {
+    background-color: #2a2a2a; /* Dark background matching the theme */
+}
+
+mat-card-header {
     padding: 16px 16px 0 16px;
-  }
-  
-  mat-card-title {
+}
+
+mat-card-title {
     font-size: 20px;
-    color: #333;
+    color: white;
     font-weight: 500;
     margin-bottom: 16px;
-  }
-  
-  .form {
+}
+
+.form {
     display: flex;
     flex-direction: column;
     gap: 16px;
     margin-bottom: 24px;
-  }
-  
-  .form-row {
+
+    button[mat-flat-button] {
+        background-color: #dc143c; /* Crimson color */
+        color: white;
+        transition: background-color 0.3s;
+        
+        &:hover {
+            background-color: #b22222; /* Darker crimson on hover */
+        }
+        
+        &[routerLink] {
+            background-color: transparent;
+            border: 1px solid #dc143c;
+            color: #dc143c;
+            
+            &:hover {
+                background-color: rgba(220, 20, 60, 0.1);
+            }
+        }
+    }
+
+    /* Enhanced form field styling for dark theme */
+    mat-form-field {
+        width: 100%;
+        
+        ::ng-deep {
+            .mat-mdc-text-field-wrapper {
+                background-color: #3a3a3a;
+            }
+            
+            .mat-mdc-form-field-focus-overlay {
+                color: white;
+            }
+            
+            .mdc-text-field--filled:not(.mdc-text-field--disabled) {
+                color: white;
+            }
+            
+            .mdc-text-field--outlined .mdc-notched-outline .mdc-notched-outline__leading,
+            .mdc-text-field--outlined .mdc-notched-outline .mdc-notched-outline__trailing,
+            .mdc-text-field--outlined .mdc-notched-outline .mdc-notched-outline__notch {
+                border-color: rgba(255, 255, 255, 0.3);
+            }
+            
+            .mat-mdc-form-field-label {
+                color: white; /* Pure white label text */
+            }
+            
+            input.mat-mdc-input-element {
+                color: white;
+            }
+            
+            .mat-mdc-form-field.mat-focused .mat-mdc-form-field-label {
+                color: #dc143c;
+            }
+
+            /* Placeholder text - pure white */
+            mat-label {
+                color: white;
+                opacity: 1;
+            }
+            
+            /* Icons inside form fields */
+            .mat-mdc-form-field-icon-suffix mat-icon {
+                color: white; /* Pure white icon color */
+            }
+        }
+    }
+}
+
+.form-row {
     display: flex;
     gap: 16px;
     align-items: flex-start;
-  }
-  
-  .input {
+}
+
+.input {
     flex: 2;
-  }
-  
-  .post-title-input {
+}
+
+.post-title-input {
     flex: 1;
-  }
-  
-  .full-width {
+}
+
+.full-width {
     width: 100%;
-  }
-  
-  .add-button {
+}
+
+.add-button {
     margin-top: 4px;
     height: 56px;
-  }
-  
-  .table-container {
+}
+
+.table-container {
     width: 100%;
     overflow-x: auto;
-  }
-  
-  .concert-table {
+}
+
+.concert-table {
     width: 100%;
     min-width: 650px;
-  }
-  
-  th.mat-header-cell {
+}
+
+th.mat-header-cell {
     color: rgba(0, 0, 0, 0.7);
     font-weight: 500;
     font-size: 14px;
-  }
-  
-  .mat-row:hover {
+}
+
+.mat-row:hover {
     background-color: #f9f9f9;
-  }
-  
-  .mat-row .mat-cell {
+}
+
+.mat-row .mat-cell {
     border-bottom: 1px solid rgba(0, 0, 0, 0.08);
-  }
-  
-  .mat-column-status {
+}
+
+.mat-column-status {
     width: 70px;
-  }
-  
-  .mat-column-priority {
+}
+
+.mat-column-priority {
     width: 120px;
     text-align: center;
-  }
-  
-  .mat-column-dueDate {
+}
+
+.mat-column-dueDate {
     width: 120px;
-  }
-  
-  .mat-column-actions {
+}
+
+.mat-column-actions {
     width: 70px;
     text-align: center;
-  }
+}
 
-
-  // post stuff
-  mat-card-footer{
+// post stuff
+mat-card-footer {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -148,81 +215,99 @@ p {
     max-height: fit-content;
     max-width: 100%;
     box-sizing: border-box;
-  }
+}
 
-  mat-divider{
+mat-divider {
     margin: 15px 0;
-  }
+}
 
-  mat-card-footer > div{
+mat-card-footer > div {
     font-size: 1rem;
-  }
+}
 
-  .post-card{
+.post-card {
     width: 90%;
     justify-content: center;
     text-align: left;
 
     margin: 10px 0;
-  }
+}
 
-  .post-text{
+.post-text {
     width: 95%;
-  }
+}
 
-  //ngClass stuff
-  .expanded{
+//ngClass stuff
 
-  }
-  
-  .not-expanded{
+.not-expanded {
     display: none;
-  }
+}
 
-  @media (max-width: 850px) {
+.button-group button {
+    background-color: #3a3a3a; /* Dark button background */
+    color: #ffffff; /* Light text */
+    border: 1px solid #444444; /* Subtle border */
+    border-radius: 4px; /* Rounded corners */
+    padding: 8px 12px; /* Padding for better click area */
+    cursor: pointer; /* Pointer cursor for interactivity */
+    transition: background-color 0.3s, transform 0.2s; /* Smooth transitions */
+    margin: 0 2px; /* Add horizontal margin between buttons */
+}
+
+.button-group button:hover {
+    background-color: #4a4a4a; /* Slightly lighter background on hover */
+    transform: scale(1.05); /* Slight zoom effect */
+}
+
+.button-group button.active {
+    background-color: #dc143c; /* Crimson for active state */
+    color: #ffffff; /* Ensure text is readable */
+}
+
+@media (max-width: 850px) {
     .main-card {
-      width: 95%;
+        width: 95%;
     }
     
     .form-row {
-      flex-direction: column;
+        flex-direction: column;
     }
     
     .input, .post-title-input {
-      width: 100%;
+        width: 100%;
     }
     
     .add-button {
-      width: 100%;
-      margin: 10px, 0;
+        width: 100%;
+        margin: 10px, 0;
     }
     
     .table {
-      display: block;
-      overflow-x: auto;
-      white-space: nowrap;
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
     }
     
     .mat-column-name {
-      min-width: 200px;
+        min-width: 200px;
     }
-  }
-  
-  @media (max-width: 480px) {
+}
+
+@media (max-width: 480px) {
     .table {
-      font-size: 14px;
+        font-size: 14px;
     }
     
     .mat-header-cell, .mat-cell {
-      padding: 8px 4px;
+        padding: 8px 4px;
     }
     
     .add-button {
-      width: 100%;
-      margin: 10px, 0;
+        width: 100%;
+        margin: 10px, 0;
     }
     
     .mat-column-name {
-      min-width: 150px;
+        min-width: 150px;
     }
-  }
+}

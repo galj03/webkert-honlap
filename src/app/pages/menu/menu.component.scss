@@ -1,6 +1,6 @@
 a {
     text-decoration: none;
-    color: white;
+    color: #dc143c; /* Crimson color */
     font-size: 20px;
     border-radius: 0 !important;
 }
@@ -10,7 +10,7 @@ a {
 }
 
 .active-list-item {
-    background-color: rgba(90, 74, 247, 0.3);
+    background-color: rgba(220, 20, 60, 0.3); /* Crimson background */
     color: white;
     font-weight: bold;
 }
