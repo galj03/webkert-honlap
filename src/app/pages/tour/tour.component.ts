@@ -58,23 +58,17 @@ export class TourComponent implements OnInit, OnDestroy {
     private tourService: TourService
   ) {}
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     this.initializeForm();
-    this.loadTourData();
+    await this.loadTourData();
   }
 
-  loadTourData() {
-    this.tourService.getCurrentTour()
-    .then(t => {
-      this.currentTour = t;
-      this.title = t.title;
-      console.log("Selected tour: ", this.currentTour);
+  async loadTourData() {
+    this.currentTour = await this.tourService.getCurrentTour();
+    this.title = this.currentTour.title;
+    console.log("Selected tour: ", this.currentTour);
 
-      this.loadConcerts();
-    })
-    .catch(e =>{
-      console.error(e);
-    });
+    this.loadConcerts();
 
     const subscription = this.tourService.getAllTours()
     .subscribe({

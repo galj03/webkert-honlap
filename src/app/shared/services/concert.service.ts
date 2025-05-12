@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Tour } from '../models/Tour';
 import { Concert } from '../models/Concert';
-import { Observable, of, switchMap, firstValueFrom, take } from 'rxjs';
+import { Observable, of, switchMap, firstValueFrom, take, from } from 'rxjs';
 import { collection, query, where, getDocs, Firestore, addDoc, updateDoc, orderBy } from '@angular/fire/firestore';
 import { AuthService } from './auth.service';
 import { CONCERT_COLLECTION } from '../constants/constants';
@@ -37,46 +37,39 @@ export class ConcertService {
 
   //CREATE
   async addConcert(concert: Omit<Concert, 'id'>): Promise<Concert> {
-    try {
-      const user = await firstValueFrom(this.authService.currentUser.pipe(take(1)));
-      if (!user) {
-        throw new Error('No authenticated user found');
+    return new Promise<Concert>(async (resolve, reject) => {
+      try {
+        //TODO: check if date is between tour start and end dates
+
+        const concertCollection = collection(this.firestore, CONCERT_COLLECTION);
+        
+        const concertToSave = {
+          ...concert,
+          date: this.formatDateToString(concert.date)
+        };
+        
+        const docRef = await addDoc(concertCollection, concertToSave);
+        const concertId = docRef.id;
+        
+        await updateDoc(docRef, { id: concertId });
+        
+        const newConcert = {
+          ...concertToSave,
+          id: concertId,
+          date: new Date(concertToSave.date)
+        } as Concert;
+
+        resolve(newConcert);
+      } catch (error) {
+        console.error('Error adding task:', error);
+        reject(error);
       }
-
-      //TODO: check if date is between tour start and end dates
-
-      const concertCollection = collection(this.firestore, CONCERT_COLLECTION);
-      
-      const concertToSave = {
-        ...concert,
-        date: this.formatDateToString(concert.date)
-      };
-      
-      const docRef = await addDoc(concertCollection, concertToSave);
-      const concertId = docRef.id;
-      
-      await updateDoc(docRef, { id: concertId });
-      
-      const newConcert = {
-        ...concertToSave,
-        id: concertId,
-        date: new Date(concertToSave.date)
-      } as Concert;
-
-      return newConcert;
-    } catch (error) {
-      console.error('Error adding task:', error);
-      throw error;
-    }
+    });
   }
 
   //READ
   getAllConcerts(): Observable<Concert[]> {
-    return this.authService.currentUser.pipe(
-      switchMap(async user => {
-        if (!user) {
-          return of([]);
-        }
+    return from(new Promise<Concert[]>(async (resolve, reject) => {
         try {
           const concertCollection = collection(this.firestore, CONCERT_COLLECTION);
           const concerts: Concert[] = [];
@@ -87,22 +80,16 @@ export class ConcertService {
             concerts.push({ ...doc.data(), id: doc.id } as Concert);
           });
 
-          return of(concerts);
+          resolve(concerts);
         } catch (error) {
           console.error('Error fetching concerts:', error);
-          return of([]);
+          reject(error);
         }
-      }),
-      switchMap(concerts => concerts)
-    );
+      }));
   }
 
   getAllConcertsFromTour(currentTour: Tour): Observable<Concert[]> {
-    return this.authService.currentUser.pipe(
-      switchMap(async user => {
-        if (!user) {
-          return of([]);
-        }
+    return from(new Promise<Concert[]>(async (resolve, reject) => {
         try {
           const concertCollection = collection(this.firestore, CONCERT_COLLECTION);
           const concerts: Concert[] = [];
@@ -115,14 +102,12 @@ export class ConcertService {
             concerts.push({ ...doc.data(), id: doc.id } as Concert);
           });
 
-          return of(concerts);
+          resolve(concerts);
         } catch (error) {
           console.error('Error fetching concerts:', error);
-          return of([]);
+          reject(error);
         }
-      }),
-      switchMap(concerts => concerts)
-    );
+      }));
   }
 
   //TODO

@@ -1,7 +1,7 @@
 import { Injectable, OnInit } from '@angular/core';
 import { Tour } from '../models/Tour';
 import { collection, query, getDocs, Firestore, addDoc, updateDoc, where, limit } from '@angular/fire/firestore';
-import { Observable, switchMap, of, firstValueFrom, take } from 'rxjs';
+import { Observable, switchMap, of, firstValueFrom, take, from } from 'rxjs';
 import { TOUR_COLLECTION } from '../constants/constants';
 import { AuthService } from './auth.service';
 
@@ -21,18 +21,20 @@ export class TourService implements OnInit{
   }
 
   async initCurrentTour(): Promise<Tour> {
-    try{
-    const tours = await firstValueFrom(this.getAllTours().pipe(take(1)));
-      if(!tours.at(0)){
-        console.error('No tour found.');
+    return new Promise(async (resolve, reject) => {
+      try{
+      const tours = await firstValueFrom(this.getAllTours().pipe(take(1)));
+        if(!tours.at(0)){
+          console.error('No tour found.');
+          reject(new Error('No tour found.'));
+        }
+        resolve(tours.at(0) as Tour);
       }
-      return tours.at(0) as Tour;
-    }
-    catch (error) {
-      console.error('Error fetching tours.', error);
-    }
-
-    return null as unknown as Tour;
+      catch (error) {
+        console.error('Error fetching tours.', error);
+          reject(error);
+      }
+    });
   }
 
   //CREATE
@@ -70,11 +72,7 @@ export class TourService implements OnInit{
 
   //READ
   getAllTours(): Observable<Tour[]> {
-      return this.authService.currentUser.pipe(
-        switchMap(async user => {
-          if (!user) {
-            return of([]);
-          }
+      return from(new Promise<Tour[]>(async (resolve, reject) => {
           try {
             const tourCollection = collection(this.firestore, TOUR_COLLECTION);
             const tours: Tour[] = [];
@@ -85,7 +83,7 @@ export class TourService implements OnInit{
               tours.push({ ...doc.data(), id: doc.id } as Tour);
             });
   
-            return of(tours.sort((a, b) => {
+            resolve(tours.sort((a, b) => {
               if(a.startYear == b.startYear){
                 return a.endYear - b.endYear;
               }
@@ -93,20 +91,24 @@ export class TourService implements OnInit{
             }));
           } catch (error) {
             console.error('Error fetching concerts:', error);
-            return of([]);
+            return reject(error);
           }
-        }),
-        switchMap(concerts => concerts)
+        })
       );
   }
 
   async getCurrentTour(): Promise<Tour> {
-    return new Promise((resolve) => {
+    return new Promise(async (resolve, reject) => {
     if(!this.currentTour){
-      this.initCurrentTour().then(t =>{
-        this.currentTour = t;
-        resolve(this.currentTour as Tour);
-      });
+      try{
+      const tour = await this.initCurrentTour();
+      this.currentTour = tour;
+
+      resolve(this.currentTour as Tour);
+      }
+      catch (e){
+        reject(e);
+      }
     }
 
     resolve(this.currentTour as Tour);

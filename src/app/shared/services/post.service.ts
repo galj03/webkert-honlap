@@ -45,10 +45,12 @@ export class PostService implements OnInit {
 
   //CREATE
   async addPost(post: Omit<Post, 'id'>): Promise<Post> {
+      return new Promise<Post>(async (resolve, reject) => {
       try {
         const user = await firstValueFrom(this.authService.currentUser.pipe(take(1)));
         if (!user) {
-          throw new Error('No authenticated user found');
+          const e = new Error('No authenticated user found');
+          reject(e);
         }
   
         const postCollection = collection(this.firestore, POST_COLLECTION);
@@ -69,11 +71,12 @@ export class PostService implements OnInit {
           date: new Date(postToSave.date)
         } as Post;
   
-        return newPost;
+        resolve(newPost);
       } catch (error) {
         console.error('Error adding task:', error);
-        throw error;
+        reject(error);
       }
+    });
   }
   
   //READ
