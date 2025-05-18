@@ -43,7 +43,6 @@ export class AuthService {
     });
   }
 
-  //TODO: connect to signup page
   async signUp(email: string, password: string, userData: Partial<User>): Promise<UserCredential> {
     try {
       const userCredential = await createUserWithEmailAndPassword(
@@ -55,6 +54,7 @@ export class AuthService {
       await this.createUserData(userCredential.user.uid, {
         ...userData,
         id: userCredential.user.uid,
+        authId: userCredential.user.uid,
         email: email,
       });
 
