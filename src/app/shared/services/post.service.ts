@@ -32,8 +32,8 @@ export class PostService {
   }
 
   //CREATE
-  async addPost(post: Omit<Post, 'id'>): Promise<Post> {
-      return new Promise<Post>(async (resolve, reject) => {
+  async addPost(post: Omit<FirebasePost, 'id'>): Promise<FirebasePost> {
+      return new Promise<FirebasePost>(async (resolve, reject) => {
       try {
         const user = await firstValueFrom(this.authService.currentUser.pipe(take(1)));
         if (!user) {
@@ -55,9 +55,8 @@ export class PostService {
         
         const newPost = {
           ...postToSave,
-          id: postId,
-          date: new Date(postToSave.date)
-        } as Post;
+          id: postId
+        } as FirebasePost;
   
         resolve(newPost);
       } catch (error) {

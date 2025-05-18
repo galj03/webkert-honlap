@@ -17,7 +17,8 @@ export class UserService {
     if(user == null){
       return null;
     }
-
+    console.log(user);
+    
     return this.getUserByAuthId(user.uid);
   }
 

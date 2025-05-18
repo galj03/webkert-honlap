@@ -10,7 +10,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
-import { Post } from '../../shared/models/Post';
+import { FirebasePost, Post } from '../../shared/models/Post';
 import { User } from '../../shared/models/User';
 import { PostService } from '../../shared/services/post.service';
 import { PostDateFormatterPipe } from '../../shared/pipes/post_date.pipe';
@@ -64,6 +64,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.getCurrentUser();
   }
   
+  //TODO: some random errors... - fix them!!!
   async getCurrentUser() {
     const user = await firstValueFrom(this.authService.currentUser.pipe(take(1)));
       this.userService.getUser(user)
@@ -107,11 +108,11 @@ export class HomeComponent implements OnInit, OnDestroy {
         this.isLoading = true;
         const formValue = this.postForm.value;
         
-        const newPost: Omit<Post, 'id'> = {
+        const newPost: Omit<FirebasePost, 'id'> = {
           title: formValue.title,
           content: formValue.content,
-          postedBy: this.currentUser as User,
-          date: new Date(Date.now())
+          postedBy: this.currentUser!.id,
+          date: this.formatDateToString(new Date(Date.now()))
         };
         
         this.postSevice.addPost(newPost)
@@ -134,4 +135,18 @@ export class HomeComponent implements OnInit, OnDestroy {
     editPost(id: string) {
       this.router.navigate(['/edit-post', id]);
     }
+
+    private formatDateToString(date: Date | string): string {
+    if (typeof date === 'string') {
+      const dateObj = new Date(date);
+      if (isNaN(dateObj.getTime())) {
+        return new Date().toISOString().split('T')[0];
+      }
+      return date.includes('T') ? date.split('T')[0] : date;
+    }
+    if (date instanceof Date) {
+      return date.toISOString().split('T')[0];
+    }
+    return new Date().toISOString().split('T')[0];
+  }
 }
