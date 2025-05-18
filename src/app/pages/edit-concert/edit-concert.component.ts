@@ -16,6 +16,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatTableModule } from '@angular/material/table';
 import { TourService } from '../../shared/services/tour.service';
 import { Tour } from '../../shared/models/Tour';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-edit-concert',
@@ -48,7 +49,8 @@ export class EditConcertComponent {
   constructor(
     private fb: FormBuilder,
     private concertService: ConcertService,
-    private tourService: TourService
+    private tourService: TourService,
+    private router: Router
   ){ }
 
   async ngOnInit(): Promise<void> {
@@ -100,7 +102,7 @@ export class EditConcertComponent {
       this.concertService.updateConcert(this.concertId!, newConcert)
       .then(() => {
         console.log("Update successful");
-        
+        this.router.navigate(["/tour"]);
       })
       .catch(error => {
         console.error('Error updating concert:', error);

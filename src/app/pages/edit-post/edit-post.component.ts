@@ -12,6 +12,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTableModule } from '@angular/material/table';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-edit-post',
@@ -43,7 +44,8 @@ export class EditPostComponent implements OnInit{
 
   constructor(
     private fb: FormBuilder,
-    private postService: PostService
+    private postService: PostService,
+    private router: Router
   ){ }
 
   async ngOnInit(): Promise<void> {
@@ -72,6 +74,7 @@ export class EditPostComponent implements OnInit{
             this.postService.updatePost(this.postId!, newPost)
               .then(()=> {
                 console.log("Update successful");
+                this.router.navigate(["/home"]);
               });
           } else {
             Object.keys(this.postForm.controls).forEach(key => {

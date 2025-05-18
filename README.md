@@ -4,9 +4,10 @@ This project was generated using [Angular CLI](https://github.com/angular/angula
 
 ## !!!Fontos infó a javítóknak!!!
 
-Ahol a projektben **"TODO"** szerepel, az a második mérföldkőre fog elkészülni. Nem azért maradt úgy, mert valamit nem fejeztem be, amit az első mérföldkőre szántam.
+Egy felhasználó bejelentkezési adatai:
 
-Köszönöm a megértést!
+Email: asd@asd.com
+Jelszó: asdasd
 
 ## Development server
 

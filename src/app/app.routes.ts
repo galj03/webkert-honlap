@@ -16,11 +16,6 @@ export const routes: Routes = [
       {
         path: 'tour', component: TourComponent
       },
-      // TODO: ha van valami, aminek nem akaruk megvarni a betolteset, akkor lazy loaddal tolti a dolgokat kozben (kinda)
-      // { 
-      //   path: 'login',
-      //   loadChildren: () => import('./pages/login/login.component').then(m => m.LoginComponent) 
-      // },
       { 
         path: 'login', component: LoginComponent,
         canActivate: [publicGuard]

@@ -39,7 +39,18 @@ export class ConcertService {
   async addConcert(concert: Omit<Concert, 'id'>): Promise<Concert> {
     return new Promise<Concert>(async (resolve, reject) => {
       try {
-        //TODO: check if date is between tour start and end dates
+        const tour = await this.tourService.getTourById(concert.tour);
+        if(!tour){
+          reject("Tour not found.");
+          return;
+        }
+        const year = concert.date.getFullYear();
+        console.log(year);
+        
+        if(year<tour.startYear || year>tour.endYear){
+          reject("Concert is not in tour interval.");
+          return;
+        }
 
         const concertCollection = collection(this.firestore, CONCERT_COLLECTION);
         
@@ -112,18 +123,24 @@ export class ConcertService {
 
     async getConcertById(concertId: string): Promise<Concert | null>{
               return new Promise(async (resolve, reject) => {
-              const concertCollection = collection(this.firestore, CONCERT_COLLECTION);
-              const q = query(concertCollection,
-                              where('id', '==', concertId),
-                              limit(1)); // komplex query
-              const querySnapshot = await getDocs(q);
-              const concertDoc = querySnapshot.docs[0];
-              if (!concertDoc) {
-                reject(new Error('User not found: '+ concertId));
-              }
-              const postData = concertDoc.data() as Concert;
-          
-              resolve(postData);
+                try{
+                  const concertCollection = collection(this.firestore, CONCERT_COLLECTION);
+                  const q = query(concertCollection,
+                                  where('id', '==', concertId),
+                                  limit(1)); // komplex query
+                  const querySnapshot = await getDocs(q);
+                  const concertDoc = querySnapshot.docs[0];
+                  if (!concertDoc) {
+                    reject(new Error('User not found: '+ concertId));
+                  }
+                  const postData = concertDoc.data() as Concert;
+              
+                  resolve(postData);
+                
+                } catch (error) {
+                  console.error('Error adding task:', error);
+                  reject(error);
+                }
               });
         }
 

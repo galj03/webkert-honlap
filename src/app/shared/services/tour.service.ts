@@ -37,7 +37,6 @@ export class TourService implements OnInit{
     });
   }
 
-  //TODO: use this somewhere
   //CREATE
   async addTour(tour: Omit<Tour, 'id'>): Promise<Tour> {
     return new Promise(async (resolve) => {
@@ -137,9 +136,24 @@ export class TourService implements OnInit{
     });
   }
 
-  //TODO
-  //UPDATE
+  async getTourById(id: string): Promise<Tour>{
+    return new Promise(async (resolve, reject) => {
+      try{
+        const tourCollection = collection(this.firestore, TOUR_COLLECTION);
+        const q = query(tourCollection,
+                        where('id', '==', id),
+                        limit(1)); // komplex query
+        const querySnapshot = await getDocs(q);
+        
+        querySnapshot.forEach(doc => {
+          resolve({ ...doc.data(), id: doc.id } as Tour);
+        });
+      }
+      catch (error) {
+        console.error('Error fetching tours.', error);
+      }
 
-  //TODO
-  //DELETE
+      reject(null as unknown as Tour);
+    });
+  }
 }

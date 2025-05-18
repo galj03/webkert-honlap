@@ -64,7 +64,6 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.getCurrentUser();
   }
   
-  //TODO: auth works with only one user(???)
   async getCurrentUser() {
     const user = await firstValueFrom(this.authService.currentUser.pipe(take(1)));
       this.userService.getUser(user)

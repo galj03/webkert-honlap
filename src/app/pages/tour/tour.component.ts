@@ -114,7 +114,7 @@ export class TourComponent implements OnInit, OnDestroy {
       venue: ['', [Validators.required, Validators.minLength(3)]],
       place: ['', [Validators.required, Validators.minLength(3)]],
       concertDate: [new Date(), Validators.required],
-      tour: ['', Validators.maxLength(200)] //TODO: handle this
+      tour: ['', Validators.maxLength(200)]
     });
   }
 
