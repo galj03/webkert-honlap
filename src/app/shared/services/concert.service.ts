@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Tour } from '../models/Tour';
 import { Concert } from '../models/Concert';
 import { Observable, of, switchMap, firstValueFrom, take, from } from 'rxjs';
-import { collection, query, where, getDocs, Firestore, addDoc, updateDoc, orderBy, limit } from '@angular/fire/firestore';
+import { collection, query, where, getDocs, Firestore, addDoc, updateDoc, orderBy, limit, doc } from '@angular/fire/firestore';
 import { AuthService } from './auth.service';
 import { CONCERT_COLLECTION } from '../constants/constants';
 import { TourService } from './tour.service';
@@ -127,8 +127,24 @@ export class ConcertService {
               });
         }
 
-  //TODO
   //UPDATE
+  async updateConcert(concertId: string, updatedData: Partial<Concert>): Promise<void> {
+    try {
+      const dataToUpdate: any = { ...updatedData };
+      if (dataToUpdate.date) {
+        dataToUpdate.date = this.formatDateToString(dataToUpdate.date);
+      }
+      console.log("progress");
+      
+
+      const concertDocRef = doc(this.firestore, CONCERT_COLLECTION, concertId);
+      console.log(dataToUpdate);
+      return updateDoc(concertDocRef, dataToUpdate);
+    } catch (error) {
+      console.error('Error updating concert:', error);
+      throw error;
+    }
+  }
 
   //TODO
   //DELETE

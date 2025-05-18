@@ -1,1 +1,34 @@
-<p>{{concert?.venue}}</p>
+<main class="flexbox">
+    <mat-card class="main-card">
+        <mat-card-header>
+        <mat-card-title>Turnék</mat-card-title>
+        </mat-card-header>
+        
+        <mat-card-content>
+        <form [formGroup]="concertForm" (ngSubmit)="editConcert()" class="form">
+            <div class="form-row">
+            <mat-form-field appearance="outline" class="input">
+                <mat-label>Koncert helye (település)</mat-label>
+                <input matInput formControlName="place">
+            </mat-form-field>
+            </div>
+            
+            <div class="form-row">
+            <mat-form-field appearance="outline" class="date-picker">
+                <mat-label>Koncert dátuma</mat-label>
+                <input matInput [matDatepicker]="picker" formControlName="concertDate">
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+            
+            <button mat-flat-button color="primary" type="submit" class="add-button">Koncert módosítása</button>
+            </div>
+            
+            <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Koncert helyszíne</mat-label>
+            <input matInput formControlName="venue">
+            </mat-form-field>
+        </form>
+        </mat-card-content>
+  </mat-card>
+</main>

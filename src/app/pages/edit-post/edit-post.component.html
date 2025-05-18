@@ -1,2 +1,25 @@
-<p>{{post?.title}}</p>
-<p>{{postId}}</p>
+<mat-card class="main-card">
+      <mat-card-header>
+        <mat-card-title>Posztok</mat-card-title>
+      </mat-card-header>
+      
+      <mat-card-content>
+
+        <form [formGroup]="postForm" (ngSubmit)="editPost()" class="form">
+            <div class="form-row">
+            <mat-form-field appearance="outline" class="post-title-input">
+                <mat-label>Poszt címe</mat-label>
+                <input matInput formControlName="title">
+            </mat-form-field>
+            
+            <button mat-flat-button color="primary" type="submit" class="add-button clickbutton">Poszt módosítása</button>
+            </div>
+            
+            <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Poszt tartalma</mat-label>
+            <input matInput formControlName="content">
+            </mat-form-field>
+        </form>
+      
+      </mat-card-content>
+</mat-card>

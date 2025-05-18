@@ -3,7 +3,7 @@ import { FirebasePost, Post } from '../models/Post';
 import { User } from '../models/User';
 import { UserService } from './user.service';
 import { AuthService } from './auth.service';
-import { collection, addDoc, updateDoc, Firestore, getDocs, query, orderBy, collectionData, limit, where } from '@angular/fire/firestore';
+import { collection, addDoc, updateDoc, Firestore, getDocs, query, orderBy, collectionData, limit, where, doc } from '@angular/fire/firestore';
 import { first, firstValueFrom, map, Observable, of, Subscriber, switchMap, take, from } from 'rxjs';
 import { POST_COLLECTION } from '../constants/constants';
 
@@ -122,8 +122,24 @@ export class PostService {
           });
     }
 
-  //TODO
   //UPDATE
+  async updatePost(postId: string, updatedData: Partial<Post>): Promise<void> {
+      try {
+        const dataToUpdate: any = { ...updatedData };
+        if (dataToUpdate.date) {
+          dataToUpdate.date = this.formatDateToString(dataToUpdate.date);
+        }
+        console.log("progress");
+        
+  
+        const postDocRef = doc(this.firestore, POST_COLLECTION, postId);
+        console.log(dataToUpdate);
+        return updateDoc(postDocRef, dataToUpdate);
+      } catch (error) {
+        console.error('Error updating post:', error);
+        throw error;
+      }
+    }
 
   //TODO
   //DELETE
