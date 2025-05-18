@@ -9,14 +9,14 @@
             <div class="form-row">
             <mat-form-field appearance="outline" class="input">
                 <mat-label>Koncert helye (település)</mat-label>
-                <input matInput formControlName="place">
+                <input matInput formControlName="place" [defaultValue]="concert?.place">
             </mat-form-field>
             </div>
             
             <div class="form-row">
             <mat-form-field appearance="outline" class="date-picker">
                 <mat-label>Koncert dátuma</mat-label>
-                <input matInput [matDatepicker]="picker" formControlName="concertDate">
+                <input matInput [matDatepicker]="picker" formControlName="concertDate" [defaultValue]="concert?.date">
                 <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                 <mat-datepicker #picker></mat-datepicker>
             </mat-form-field>
@@ -26,7 +26,7 @@
             
             <mat-form-field appearance="outline" class="full-width">
             <mat-label>Koncert helyszíne</mat-label>
-            <input matInput formControlName="venue">
+            <input matInput formControlName="venue" [defaultValue]="concert?.venue">
             </mat-form-field>
         </form>
         </mat-card-content>

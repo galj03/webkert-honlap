@@ -54,8 +54,9 @@ export class EditConcertComponent {
   ){ }
 
   async ngOnInit(): Promise<void> {
-    this.concert = await this.concertService.getConcertById(this.concertId!);
     this.initializeForm();
+    this.concert = await this.concertService.getConcertById(this.concertId!);
+    this.concertForm.setValue({venue: this.concert?.venue, place: this.concert?.place, concertDate: this.concert?.date});
 
     const subscription = this.tourService.getAllTours()
     .subscribe({

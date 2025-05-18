@@ -51,6 +51,7 @@ export class EditPostComponent implements OnInit{
   async ngOnInit(): Promise<void> {
     this.initializeForm();
     this.post = await this.postService.getPostById(this.postId!);
+    this.postForm.setValue({title: this.post?.title, content: this.post?.content});
   }
 
   initializeForm(): void {
