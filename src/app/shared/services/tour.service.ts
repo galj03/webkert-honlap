@@ -37,6 +37,7 @@ export class TourService implements OnInit{
     });
   }
 
+  //TODO: use this somewhere
   //CREATE
   async addTour(tour: Omit<Tour, 'id'>): Promise<Tour> {
     return new Promise(async (resolve) => {
@@ -125,14 +126,12 @@ export class TourService implements OnInit{
         const querySnapshot = await getDocs(q);
         
         querySnapshot.forEach(doc => {
-          console.log("asda");
           resolve({ ...doc.data(), id: doc.id } as Tour);
         });
       }
       catch (error) {
         console.error('Error fetching tours.', error);
       }
-  console.log("asd");
 
       reject(null as unknown as Tour);
     });

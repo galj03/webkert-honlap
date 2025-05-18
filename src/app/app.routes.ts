@@ -5,6 +5,9 @@ import { SignupComponent } from './pages/signup/signup.component';
 import { TourComponent } from './pages/tour/tour.component';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
 import { publicGuard } from './shared/guards/public.guard';
+import { EditPostComponent } from './pages/edit-post/edit-post.component';
+import { EditConcertComponent } from './pages/edit-concert/edit-concert.component';
+import { authGuard } from './shared/guards/auth.guard';
 
 export const routes: Routes = [
     {
@@ -25,6 +28,14 @@ export const routes: Routes = [
       { 
         path: 'signup', component: SignupComponent,
         canActivate: [publicGuard]
+      },
+      { 
+        path: 'edit-concert/:id', component: EditConcertComponent,
+        canActivate: [authGuard]
+      },
+      { 
+        path: 'edit-post/:id', component: EditPostComponent,
+        canActivate: [authGuard]
       },
       // { 
       //   path: 'admin', 

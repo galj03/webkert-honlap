@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Tour } from '../models/Tour';
 import { Concert } from '../models/Concert';
 import { Observable, of, switchMap, firstValueFrom, take, from } from 'rxjs';
-import { collection, query, where, getDocs, Firestore, addDoc, updateDoc, orderBy } from '@angular/fire/firestore';
+import { collection, query, where, getDocs, Firestore, addDoc, updateDoc, orderBy, limit } from '@angular/fire/firestore';
 import { AuthService } from './auth.service';
 import { CONCERT_COLLECTION } from '../constants/constants';
 import { TourService } from './tour.service';
@@ -109,6 +109,23 @@ export class ConcertService {
         }
       }));
   }
+
+    async getConcertById(concertId: string): Promise<Concert | null>{
+              return new Promise(async (resolve, reject) => {
+              const concertCollection = collection(this.firestore, CONCERT_COLLECTION);
+              const q = query(concertCollection,
+                              where('id', '==', concertId),
+                              limit(1)); // komplex query
+              const querySnapshot = await getDocs(q);
+              const concertDoc = querySnapshot.docs[0];
+              if (!concertDoc) {
+                reject(new Error('User not found: '+ concertId));
+              }
+              const postData = concertDoc.data() as Concert;
+          
+              resolve(postData);
+              });
+        }
 
   //TODO
   //UPDATE

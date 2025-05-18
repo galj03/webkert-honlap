@@ -3,7 +3,7 @@ import { FirebasePost, Post } from '../models/Post';
 import { User } from '../models/User';
 import { UserService } from './user.service';
 import { AuthService } from './auth.service';
-import { collection, addDoc, updateDoc, Firestore, getDocs, query, orderBy, collectionData } from '@angular/fire/firestore';
+import { collection, addDoc, updateDoc, Firestore, getDocs, query, orderBy, collectionData, limit, where } from '@angular/fire/firestore';
 import { first, firstValueFrom, map, Observable, of, Subscriber, switchMap, take, from } from 'rxjs';
 import { POST_COLLECTION } from '../constants/constants';
 
@@ -102,6 +102,24 @@ export class PostService {
             reject(error);
           }
       }));
+    }
+    
+    async getPostById(postId: string): Promise<Post | null>{
+          return new Promise(async (resolve, reject) => {
+          const postCollection = collection(this.firestore, POST_COLLECTION);
+          const q = query(postCollection,
+                          where('id', '==', postId),
+                          limit(1)); // komplex query
+          const querySnapshot = await getDocs(q);
+          const postDoc = querySnapshot.docs[0];
+          if (!postDoc) {
+            reject(new Error('User not found: '+ postId));
+          }
+          const post = postDoc.data() as FirebasePost;
+          const postData = { ...postDoc.data(), id: postDoc.id, date: new Date(post.date) } as Post;
+      
+          resolve(postData);
+          });
     }
 
   //TODO

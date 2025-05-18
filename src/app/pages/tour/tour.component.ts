@@ -19,6 +19,7 @@ import { firstValueFrom, Subscription, take } from 'rxjs';
 import { TourService } from '../../shared/services/tour.service';
 import { UserService } from '../../shared/services/user.service';
 import { AuthService } from '../../shared/services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-tour',
@@ -62,7 +63,8 @@ export class TourComponent implements OnInit, OnDestroy {
     private concertService: ConcertService,
     private tourService: TourService,
     private authService: AuthService,
-    private userService: UserService
+    private userService: UserService,
+    private router: Router
   ) {}
 
   async ngOnInit(): Promise<void> {
@@ -133,7 +135,6 @@ export class TourComponent implements OnInit, OnDestroy {
     this.subscriptions.push(subscription);
   }
 
-  //TODO: these are not getting updated
   async refreshTour() {
         this.currentTour = await this.tourService.getTourByTitle(this.selectedTour);
         this.title = this.currentTour.title;
@@ -168,5 +169,11 @@ export class TourComponent implements OnInit, OnDestroy {
         control?.markAsTouched();
       });
     }
+  }
+
+  
+  editConcert(concert: any) {
+    const concertObj = concert as Concert;
+     this.router.navigate(['/edit-concert', concertObj.id]);
   }
 }

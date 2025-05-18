@@ -86,7 +86,7 @@
             <ng-container matColumnDef="actions">
                 <th mat-header-cell *matHeaderCellDef [attr.colspan]="2">Műveletek</th>
                 <td mat-cell *matCellDef="let concert"> <!-- TODO: click action -->
-                    <button mat-icon-button color="primary" aria-label="Edit concert">
+                    <button mat-icon-button color="primary" aria-label="Edit concert" (click)="editConcert(concert)">
                         <mat-icon>edit</mat-icon>
                     </button>
                 </td>

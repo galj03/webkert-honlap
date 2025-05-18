@@ -18,6 +18,7 @@ import { MatDivider } from '@angular/material/divider';
 import { firstValueFrom, Subscription, take } from 'rxjs';
 import { UserService } from '../../shared/services/user.service';
 import { AuthService } from '../../shared/services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -49,11 +50,12 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   private subscriptions: Subscription[] = [];
 
-constructor(
+  constructor(
     private fb: FormBuilder,
     private postSevice: PostService,
     private userService: UserService,
-    private authService: AuthService
+    private authService: AuthService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -127,5 +129,9 @@ constructor(
           control?.markAsTouched();
         });
       }
+    }
+
+    editPost(id: string) {
+      this.router.navigate(['/edit-post', id]);
     }
 }
