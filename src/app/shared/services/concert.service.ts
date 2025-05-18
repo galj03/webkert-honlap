@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Tour } from '../models/Tour';
 import { Concert } from '../models/Concert';
 import { Observable, of, switchMap, firstValueFrom, take, from } from 'rxjs';
-import { collection, query, where, getDocs, Firestore, addDoc, updateDoc, orderBy, limit, doc } from '@angular/fire/firestore';
+import { collection, query, where, getDocs, Firestore, addDoc, updateDoc, orderBy, limit, doc, deleteDoc } from '@angular/fire/firestore';
 import { AuthService } from './auth.service';
 import { CONCERT_COLLECTION } from '../constants/constants';
 import { TourService } from './tour.service';
@@ -146,6 +146,21 @@ export class ConcertService {
     }
   }
 
-  //TODO
   //DELETE
+    async deleteConcert(concertId: string): Promise<void> {
+      try {
+        const user = await firstValueFrom(this.authService.currentUser.pipe(take(1)));
+        if (!user) {
+          throw new Error('No authenticated user found');
+        }
+  
+        const postDocRef = doc(this.firestore, CONCERT_COLLECTION, concertId);
+        await deleteDoc(postDocRef);
+  
+        return;
+      } catch (error) {
+        console.error('Error deleting task:', error);
+        throw error;
+      }
+    }
 }

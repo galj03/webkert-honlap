@@ -3,9 +3,9 @@ import { FirebasePost, Post } from '../models/Post';
 import { User } from '../models/User';
 import { UserService } from './user.service';
 import { AuthService } from './auth.service';
-import { collection, addDoc, updateDoc, Firestore, getDocs, query, orderBy, collectionData, limit, where, doc } from '@angular/fire/firestore';
+import { collection, addDoc, updateDoc, Firestore, getDocs, query, orderBy, collectionData, limit, where, doc, deleteDoc } from '@angular/fire/firestore';
 import { first, firstValueFrom, map, Observable, of, Subscriber, switchMap, take, from } from 'rxjs';
-import { POST_COLLECTION } from '../constants/constants';
+import { POST_COLLECTION, USER_COLLECTION } from '../constants/constants';
 
 @Injectable({
   providedIn: 'root'
@@ -140,6 +140,21 @@ export class PostService {
       }
     }
 
-  //TODO
   //DELETE
+  async deletePost(postId: string): Promise<void> {
+    try {
+      const user = await firstValueFrom(this.authService.currentUser.pipe(take(1)));
+      if (!user) {
+        throw new Error('No authenticated user found');
+      }
+
+      const postDocRef = doc(this.firestore, POST_COLLECTION, postId);
+      await deleteDoc(postDocRef);
+
+      return;
+    } catch (error) {
+      console.error('Error deleting task:', error);
+      throw error;
+    }
+  }
 }

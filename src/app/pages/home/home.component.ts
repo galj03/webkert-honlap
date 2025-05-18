@@ -64,7 +64,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.getCurrentUser();
   }
   
-  //TODO: some random errors... - fix them!!!
+  //TODO: auth works with only one user(???)
   async getCurrentUser() {
     const user = await firstValueFrom(this.authService.currentUser.pipe(take(1)));
       this.userService.getUser(user)
@@ -134,6 +134,13 @@ export class HomeComponent implements OnInit, OnDestroy {
 
     editPost(id: string) {
       this.router.navigate(['/edit-post', id]);
+    }
+    
+    deletePost(id: string) {
+      this.postSevice.deletePost(id)
+      .then(()=>{
+        this.loadPosts();
+      });
     }
 
     private formatDateToString(date: Date | string): string {

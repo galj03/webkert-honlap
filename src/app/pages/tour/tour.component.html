@@ -85,7 +85,7 @@
             
             <ng-container matColumnDef="actions">
                 <th mat-header-cell *matHeaderCellDef [attr.colspan]="2">Műveletek</th>
-                <td mat-cell *matCellDef="let concert"> <!-- TODO: click action -->
+                <td mat-cell *matCellDef="let concert">
                     <button mat-icon-button color="primary" aria-label="Edit concert" (click)="editConcert(concert)">
                         <mat-icon>edit</mat-icon>
                     </button>
@@ -94,8 +94,8 @@
 
             <ng-container matColumnDef="delete-action">
                 <th mat-header-cell *matHeaderCellDef [ngStyle]="{'display': 'none'}">Műveletek</th>
-                <td mat-cell *matCellDef="let concert"> <!-- TODO: click action -->
-                    <button mat-icon-button color="primary" aria-label="Delete concert">
+                <td mat-cell *matCellDef="let concert">
+                    <button mat-icon-button color="primary" aria-label="Delete concert" (click)="deleteConcert(concert)">
                         <mat-icon>delete</mat-icon>
                     </button>
                 </td>

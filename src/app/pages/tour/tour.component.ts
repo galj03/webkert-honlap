@@ -176,4 +176,12 @@ export class TourComponent implements OnInit, OnDestroy {
     const concertObj = concert as Concert;
      this.router.navigate(['/edit-concert', concertObj.id]);
   }
+
+  deleteConcert(concert: any) {
+    const concertObj = concert as Concert;
+    this.concertService.deleteConcert(concertObj.id)
+    .then(()=>{
+      this.loadConcerts();
+    });
+  }
 }
